@@ -7,26 +7,29 @@
 	<meta name="description" content="Aplikacja internetowa służąca do planowania domowego budżetu">
 	<meta name="keywords" content="budżet, wydatki, przychody, pieniądze, bilans, zarzadzanie, aplikacja, internetowa">
 	<meta name="author" content="Kamil Szela">
+	<meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
 	<link rel="stylesheet" type="text/css" href="style.css" ></link>
-	<script type="text/javascript" src="budzet.js"></script>
-	<script src="jquery-3.4.1.min.js"></script>
 </head>
 <body>
 	<div class="content">
-		<div class ="board">
+		<div class ="container">
 			<div class="register">
 				<input type="text" id="name" placeholder="name">
-				<input type="text" id="surname" placeholder="surname">
+				<input type="text" id="password" placeholder="password">
+				<input type="email" id="email" placeholder="examlpe@com">
+				<input type="button" id="register" value="register">
 			</div>
 			<div class="menu">
-				<div class="tile" id="expences"></div>
-				<div class="tile" id="incomes"></div>
-				<div class="tile" style="clear:both;"></div>
-				<div class="tile" id="summary"></div>
-				<div class="tile" id="setup"></div>
+				<div class="tileLeft" id="expences">1</div>
+				<div class="tileRight" id="incomes">2</div>
+				<div style="clear:both;"></div>
+				<div class="tileLeft" id="summary">3</div>
+				<div class="tileRight" id="setup">4</div>
 			</div>
 			
 		</div>
 	</div>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="budzet.js"></script>
 </body>
 <html>
