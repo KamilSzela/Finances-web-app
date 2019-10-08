@@ -1,6 +1,7 @@
 body
 {
-	background-color:#465248;
+	/* Background pattern from Toptal Subtle Patterns */
+	background-image:url("tlo/tactile_noise.png");
 }
 .container
 {
@@ -10,54 +11,81 @@ body
 }
 .register
 {
-	height:300px;
-	width:500px;
+	height:600px;
+	width:700px;
 	border-radius:10px;
-	margin-top:200px;
+	margin-top:100px;
 	margin-left:auto;
 	margin-right:auto;
-	background-color:#296933;
+	background-color:#3c4091;
 	position:static;
+}
+#title{
+	text-align:center;
+	font-size:38px;
+	padding:10px;
+}
+#subtitle{
+	text-align:center;
+	font-size:18px;
 }
 #name
 {
 	position:relative;
-	margin-top: 100px;
-	margin-left:50px;
-	width:150px;
-	height:20px;
+	margin-top: 40px;
+	margin-left:200px;
+	width:300px;
+	height:50px;
+	color:#eb8a59;
+	font-size:24px;
+	box-sizing:border-box;
+	outline:none;
+	/*box-shadow: inset 20px 20px 10px #ad5e18;*/
+	-webkit-box-shadow: 1px 1px 1px 2px #ad5e18;
+		-moz-box-shadow: 1px 1px 1px 2px #ad5e18;
+		box-shadow: 1px 1px 1px 1px #ad5e18;
 }
+#name:focus
+{
+	color:#c2470a;
+}
+
 #password
 {
-	position:absolute;
-	margin-top: 100px;
-	margin-left: 88px;
-	height:20px;
-	width:150px;
+	margin-top: 40px;
+	margin-left:200px;
+	width:300px;
+	height:50px;
+	color:#d92f03;
+	box-sizing:border-box;
+	outline:none;
 }
 #email
 {
 	position:relative;
-	margin-top:50px;
-	margin-left:172px;
-	height:20px;
-	width:150px;
-	
+	margin-top: 40px;
+	margin-left:200px;
+	width:300px;
+	height:50px;
+	color:#d92f03;
+	box-sizing:border-box;
+	outline:none;
 }
 #register
 {
 	position:relative;
 	margin-top:50px;
-	margin-left:172px;
-	height:20px;
-	width:150px;
+	margin-left:200px;
+	margin-bottom:0;
+	width:300px;
+	height:50px;
 }
 .menu
 {
 	display:none;
 	background-color:#296933;
 	height:600px;
-	width:800px;
+	width:600px;
 	margin-left:auto;
 	margin-right:auto;
 	position:static;
@@ -77,10 +105,10 @@ body
 	float:left;
 	width:200px;
 	height:200px;
-	position:relative;
+	/*position:relative;*/
 	background-color:#2948f4;
 	border: 1px solid #770000;
-	margin-left:250px;
-	margin-top:50px;
+	margin-left:348px;
+	margin-top: -252px;
 	
 }
