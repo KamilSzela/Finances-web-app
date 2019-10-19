@@ -3,22 +3,27 @@ body
 	/* Background pattern from Toptal Subtle Patterns */
 	background-image:url("tlo/tactile_noise.png");
 }
+
 .container
 {
 	width:1000px;
 	margin-left:auto;
 	margin-right:auto;
+	margin-top:0px;
 }
 .register
 {
 	height:600px;
 	width:700px;
 	border-radius:10px;
-	margin-top:100px;
+	margin-top:30px;
 	margin-left:auto;
 	margin-right:auto;
 	background-color:#3c4091;
 	position:static;
+	-webkit-box-shadow: 1px 1px 1px 2px #111214;
+	-moz-box-shadow: 1px 1px 1px 2px #111214;
+	box-shadow: 1px 1px 1px 1px #111214;
 }
 #title{
 	text-align:center;
@@ -36,14 +41,14 @@ body
 	margin-left:200px;
 	width:300px;
 	height:50px;
-	color:#eb8a59;
+	color:#d92f03;
 	font-size:24px;
 	box-sizing:border-box;
 	outline:none;
 	/*box-shadow: inset 20px 20px 10px #ad5e18;*/
 	-webkit-box-shadow: 1px 1px 1px 2px #ad5e18;
-		-moz-box-shadow: 1px 1px 1px 2px #ad5e18;
-		box-shadow: 1px 1px 1px 1px #ad5e18;
+	-moz-box-shadow: 1px 1px 1px 2px #ad5e18;
+	box-shadow: 1px 1px 1px 1px #ad5e18;
 }
 #name:focus
 {
@@ -59,6 +64,14 @@ body
 	color:#d92f03;
 	box-sizing:border-box;
 	outline:none;
+	font-size:24px;
+	-webkit-box-shadow: 1px 1px 1px 2px #ad5e18;
+	-moz-box-shadow: 1px 1px 1px 2px #ad5e18;
+	box-shadow: 1px 1px 1px 1px #ad5e18;
+}
+#password:focus
+{
+	color:#c2470a;
 }
 #email
 {
@@ -70,6 +83,14 @@ body
 	color:#d92f03;
 	box-sizing:border-box;
 	outline:none;
+	font-size:24px;
+	-webkit-box-shadow: 1px 1px 1px 2px #ad5e18;
+	-moz-box-shadow: 1px 1px 1px 2px #ad5e18;
+	box-shadow: 1px 1px 1px 1px #ad5e18;
+}
+#email:focus
+{
+	color:#c2470a;
 }
 #register
 {
@@ -79,36 +100,95 @@ body
 	margin-bottom:0;
 	width:300px;
 	height:50px;
+	
+}
+#register:hover
+{
+	cursor:pointer;
+	background-color:#f7d197;
+}
+#signIn
+{
+	position:relative;
+	margin-top:20px;
+	margin-left:200px;
+	margin-bottom:0;
+	width:300px;
+	height:50px;
+}
+#signIn:hover
+{
+	cursor:pointer;
+	background-color:#f7d197;
 }
 .menu
 {
 	display:none;
-	background-color:#296933;
 	height:600px;
-	width:600px;
+	width:700px;
+	border-radius:10px;
+	margin-top:30px;
 	margin-left:auto;
 	margin-right:auto;
+	background-color:#3c4091;
 	position:static;
 }
 .tileLeft
 {
 	float:left;
-	width:200px;
-	height:200px;
+	width:250px;
+	height:220px;
 	background-color:#2948f4;
 	border: 1px solid #770000;
-	margin: 50px 50px 50px 50px;
-	
+	margin-left: 50px;
+	margin-top: 50px;
+	border-radius:5px;
+}
+#summary
+{
+	margin-top:60px;
 }
 .tileRight
 {
 	float:left;
-	width:200px;
-	height:200px;
+	width:250px;
+	height:220px;
 	/*position:relative;*/
 	background-color:#2948f4;
 	border: 1px solid #770000;
-	margin-left:348px;
-	margin-top: -252px;
-	
+	margin-left: 398px;
+	margin-top: -222px;
+	border-radius:5px;
+}
+#setup
+{
+	position:relative;
+	margin-bottom:50px;
+	margin-top:-222px;
+}
+
+#expenceLink
+{
+	display:block;
+	width:250px;
+	height:220px;
+	text-decoration:none;
+	cursor:pointer;
+	text-align:center;
+	font-size:42px;
+	letter-spacing:2px;
+	padding-top:80px;
+	color:white;
+}
+#escape
+{
+	margin-left:auto;
+	margin-right:auto;
+	height:100px;
+	width:400px;
+	background-color:blue;
+	color:white;
+	cursor:pointer;
+	text-decoration:none;
+	display:block;
 }
