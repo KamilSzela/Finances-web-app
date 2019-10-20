@@ -9,6 +9,7 @@
 	<meta name="author" content="Kamil Szela">
 	<meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
 	<link rel="stylesheet" type="text/css" href="style.css" ></link>
+	<link rel="stylesheet" href="css/fontello.css" type="text/css" />
 </head>
 <body>
 	<div class="content">
@@ -24,14 +25,46 @@
 			</div>
 			<div class="menu">
 				<div class="tileLeft" id="expences">
-					<a href="wydatki.html" id="expenceLink">
-						Wydatki
-					</a>
+					<div class="overlay">
+						<a href="wydatki.html" class="menuLink">
+							<i class="icon-minus-circled"></i>
+								<a href="wydatki.html" class="linkOverlay">
+									<p>Wydatki</p>
+								</a>
+						</a>
+					</div>	
 				</div>
-				<div class="tileRight" id="incomes">2</div>
+				<div class="tileRight" id="incomes">
+					<div class="overlay">
+						<a href="przychody.html" class="menuLink">
+							<i class="icon-plus-circled"></i></br></br>
+								<a href="przychody.html" class="linkOverlay">
+									<p>Przychody</p>
+								</a>
+						</a>
+					</div>	
+				</div>
 				<div style="clear:both;"></div>
-				<div class="tileLeft" id="summary">3</div>
-				<div class="tileRight" id="setup">4</div>
+				<div class="tileLeft" id="summary">
+					<div class="overlay">
+						<a href="podsumowanie.html" class="menuLink">
+							<i class="icon-chart-line"></i></br></br>
+								<a href="podsumowanie.html" class="linkOverlay">
+									<p>Podsumowanie</p>
+								</a>
+						</a>
+					</div>	
+				</div>
+				<div class="tileRight" id="setup">
+					<div class="overlay">
+						<a href="ustawienia.html" class="menuLink">
+							<i class="icon-wrench"></i></br></br>
+								<a href="ustawienia.html" class="linkOverlay">
+									<p>Ustawienia</p>
+								</a>
+						</a>
+					</div>	
+				</div>
 			</div>
 			
 		</div>

@@ -136,7 +136,7 @@ function singUserIn()
 		if(emailValue != usersObj[checkedID-1].email) {alert("Wrong email"); return;}
 		loggedUserID = checkedID;
 		alert("You have been successfully logged in!");
-		sessionStorage.setItem("UserID", loggedUserID);
+		//sessionStorage.setItem("UserID", loggedUserID);
 		showMenu();
 	}
 	else alert("This login dosen't exist");
