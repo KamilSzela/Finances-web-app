@@ -55,7 +55,7 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
-.icon-wrench:before { content: '\e800'; font-size:86px;} /* '' */
-.icon-plus-circled:before { content: '\e801'; font-size:86px;} /* '' */
-.icon-minus-circled:before { content: '\e802'; font-size:86px;} /* '' */
-.icon-chart-line:before { content: '\f201'; font-size:86px;} /* '' */
+.icon-wrench:before { content: '\e800'; font-size:140px;} /* '' */
+.icon-plus-circled:before { content: '\e801'; font-size:140px;} /* '' */
+.icon-minus-circled:before { content: '\e802'; font-size:140px;} /* '' */
+.icon-chart-line:before { content: '\f201'; font-size:140px;} /* '' */
