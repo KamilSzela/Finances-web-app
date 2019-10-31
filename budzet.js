@@ -3,6 +3,7 @@ var usersObj = [];
 var lastUserID = 0;
 var loggedUserID = 0;
 var checkedID = 0;
+
 $(document).ready(function(){
 	
 	loadUsersFromLocalStorage();
@@ -23,22 +24,28 @@ $('#signIn').on('click', function(){
 $('#escapeLink').on('click', function(){
 	loggedUserID = 0;
 });
+
 function loadUsersFromLocalStorage()
 {
+	if(localStorage.length>=1){
+		
+		for(var i=0; i<localStorage.length; i++){
+			loadUserstoArray(i);
+		}
 	
-	for(var i=0; i<localStorage.length; i++){
-		loadUserstoArray(i);
+		usersObj.sort(function(a, b){return a.id - b.id;});
+		var lastPosition = usersObj.length;
+		lastUserID = usersObj[lastPosition-1].id;
 	}
-
-	usersObj.sort(function(a, b){return a.id - b.id;});
-	var lastPosition = usersObj.length;
-	lastUserID = usersObj[lastPosition-1].id;
 }
 function loadUserstoArray(i)
 {
 	var nameOfValue = localStorage.key(i); 	
-	var valueOfName = localStorage.getItem(nameOfValue);
-	getDataFromStringWithDashes(valueOfName);
+	if(nameOfValue.charAt(0)=='U'){
+		var valueOfName = localStorage.getItem(nameOfValue);
+		getDataFromStringWithDashes(valueOfName);
+	}
+	else return;
 }
 function getDataFromStringWithDashes(valueOfName)
 {
@@ -90,7 +97,7 @@ function signUpAUser()
 		lastUserID++;
 		var nameOfUser = "User" + lastUserID.toString();
 		var userRecord = lastUserID.toString() +'/'+loginValue+'/'+passwordValue+'/'+emailValue+'/';
-		localStorage.setItem(nameOfUser, userRecord);
+		
 		
 		UserInArray.id = lastUserID;
 		UserInArray.login = loginValue;
@@ -98,6 +105,7 @@ function signUpAUser()
 		UserInArray.email = emailValue;
 		usersObj.push(UserInArray);
 		
+		localStorage.setItem(nameOfUser, userRecord);
 		alert("You are successfully signed up!");
 	}
 }
