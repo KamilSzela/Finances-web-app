@@ -233,6 +233,7 @@ a:active
 	margin-right:auto;
 	background-color:#3c4091;
 	position:static;
+	
 }
 .expencesButton
 {
@@ -248,7 +249,6 @@ a:active
 	text-decoration:none;
 	display:block;
 	float:left;
-	
 }
 .row
 {

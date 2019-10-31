@@ -21,8 +21,14 @@ $('#signIn').on('click', function(){
 	//showUsersStorage();
 	singUserIn();
 });
+
 $('#escapeLink').on('click', function(){
 	loggedUserID = 0;
+});
+
+$('#expences').on('click',function(){
+	
+	showExpenceManager();
 });
 
 function loadUsersFromLocalStorage()
@@ -184,4 +190,11 @@ function showMenu()
 {
 	$('.register').css('display','none');
 	$('.menu').css('display', 'block');
+}
+
+function showExpenceManager()
+{
+	$('.expenceContainer').css('display','block');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
 }
