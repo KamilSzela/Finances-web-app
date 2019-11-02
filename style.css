@@ -81,6 +81,14 @@ a:active
 	-moz-box-shadow: 2px 2px 2px 2px #20206b;
 	box-shadow: 2px 2px 2px 1px #20206b;
 }
+.indexButton:hover
+{
+	cursor:pointer;
+	background-color:#f7d197;
+	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
+	-moz-box-shadow: 2px 2px 2px 2px #20206b;
+	box-shadow: 2px 2px 2px 1px #20206b;
+}
 #register
 {
 	position:relative;
@@ -91,14 +99,6 @@ a:active
 	height:50px;
 	
 }
-#register:hover
-{
-	cursor:pointer;
-	background-color:#f7d197;
-	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
-	-moz-box-shadow: 2px 2px 2px 2px #20206b;
-	box-shadow: 2px 2px 2px 1px #20206b;
-}
 #signIn
 {
 	position:relative;
@@ -107,14 +107,6 @@ a:active
 	margin-bottom:0;
 	width:300px;
 	height:50px;
-}
-#signIn:hover
-{
-	cursor:pointer;
-	background-color:#f7d197;
-	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
-	-moz-box-shadow: 2px 2px 2px 2px #20206b;
-	box-shadow: 2px 2px 2px 1px #20206b;
 }
 .menu
 {
@@ -222,39 +214,6 @@ a:active
 {
 	opacity:0.8;
 }
-.escapeLink
-{
-	margin-left:auto;
-	margin-right:auto;
-	height:100px;
-	width:400px;
-}
-.expencesButton
-{
-	height:100px;
-	width:400px;
-	background-color:blue;
-	color:white;
-	cursor:pointer;
-	text-decoration:none;
-	font-size: 38px;
-	display:block;
-	float:left;
-	margin-left:67px;
-	margin-right:auto;
-}
-.row
-{
-	margin: 20px 10px;
-	font-size:18px;
-	color:white;
-	min-width:1000px;
-}
-.kol
-{
-	display:inline-block;
-	margin: 0px 10px;
-}
 .textInput
 {
 	margin-left:15px;
@@ -263,3 +222,56 @@ a:active
 	border:0;
 	min-height:20px;
 }
+.textInput:focus
+{
+	color:#d92f03;
+	-webkit-box-shadow: 0px 0px 1px 2px #20206b;
+	-moz-box-shadow: 0px 0px 1px 2px #20206b;
+	box-shadow: 0px 0px 1px 1px #20206b;
+}
+#dateExpence
+{
+	margin-left:29px;
+}
+.expenceContainer
+{
+	display:none;
+	height:600px;
+	width:700px;
+	border-radius:10px;
+	margin-top:30px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#3c4091;
+	position:static;
+	
+}
+.expencesButton
+{
+	margin-left:15px;
+	margin-right:15px;
+	margin-top:0px;
+	height:45px;
+	width:195px;
+	background-color:blue;
+	color:white;
+	font-size:24px;
+	cursor:pointer;
+	text-decoration:none;
+	display:block;
+	float:left;
+}
+.row
+{
+	margin: 20px 10px;
+	font-size:18px;
+	color:white;
+	min-width:600px;
+}
+.kol
+{
+	display:inline-block;
+	margin: 0px 10px;
+	min-width:200px;
+}
+
