@@ -33,6 +33,11 @@ $('#expences').on('click',function(){
 	showExpenceManager();
 });
 
+$('#incomes').on('click',function(){
+	
+	showIncomesManager();
+});
+
 $('#addExpenceButton').on('click',function(){
 	addNewExpence();
 });
@@ -51,6 +56,15 @@ $('#showStorage').on('click', function(){
 	showExpenceStorage();
 });
 
+$('#escapeIncomes').on('click', function(){
+	loggedUserID = 0;
+	//var endOfArrayExpences = expencesObj.length;
+	//expencesObj.splice(0,endOfArrayExpences);
+	location.reload();
+	$("#name").val("");
+	$("#password").val("");
+	$("#email").val("");
+});
 function loadUsersFromLocalStorage()
 {
 	if(localStorage.length>=1){
@@ -219,6 +233,7 @@ function showExpenceManager()
 	$('.expenceContainer').css('display','block');
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
+	$('.incomesContainer').css('display','none');
 }
 function loadExpencesOfLoggedUser()
 {
@@ -350,4 +365,11 @@ function addExpenceData(i)
 	string = string +" "+ expencesObj[i].source;
 	string = string +" "+ expencesObj[i].comment;
 	return string;
+}
+function showIncomesManager()
+{
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.incomesContainer').css('display','block');
 }

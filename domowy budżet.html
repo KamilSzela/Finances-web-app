@@ -147,6 +147,50 @@
 					<input type="button" class="expencesButton" id="showStorage" value="Pokaż wydatki">
 				</div>
 			</div>
+			<div class="incomesContainer">
+				<div class="header">
+					<h2 style="color:white; text-align:center;">Strona umożliwiająca dodanie pojedynczego przychodu</h2>
+				</div>
+				<div class="inputList">
+					
+					<div class="row">
+						
+							<label>Kwota przychodu pieniędzy<input type="text" placeholder="Podaj kwotę przychodu" id="incomeAmount" class="textInput"></label>
+						
+					</div>
+						
+					<div class="row">
+						
+							<label>Data przychodu<input type="date" placeholder="Podaj datę przychodu" id="dateIncome" class="textInput"></label>
+						
+					</div>
+					<div class="row">
+						<fieldset id="incomeCategory">
+						<legend> Kategoria przychodu </legend>
+							<div><label><input type="radio" id="salary" value="Wynagrodzenie" name="incomeCategory" checked> Wynagrodzenie </label></div>
+							<div><label><input type="radio" id="intrests" value="Odsetki bankowe" name="incomeCategory"> Odsetki bankowe </label></div>
+							<div><label><input type="radio" id="allegroSell" value="Sprzedaż na Allegro" name="incomeCategory"> Sprzedaż na Allegro </label></div>
+							<div><label><input type="radio" id="otherIncomeCat" value="Inne źródło" name="incomeCategory"> Inne źródło </label></div>
+						</fieldset>
+					</div>
+					<div class="row">
+					
+						<label>Komentarz(opcjonalnie)<input type="text"  name="comment" id="commentIncome" placeholder="" class="textInput"></label>
+						
+					</div>
+					<div class="row">
+						<input type="button" class="expencesButton" id="addIncomeButton" value="Dodaj Przychód">
+					</div>
+					<div class="row">
+						<input type="button" class="expencesButton" id="escapeIncomes" value="Wyloguj się">
+					</div>
+					<div class="row">
+						<input type="button" class="expencesButton" id="showIncomeStorage" value="Pokaż przychody">
+					</div>
+					
+				</div>
+				</div>
+			</div>
 			
 		</div>
 	</div>
