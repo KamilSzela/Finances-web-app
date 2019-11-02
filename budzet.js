@@ -1,15 +1,19 @@
 
 var usersObj = [];
 var expencesObj = [];
+var incomesObj = [];
 var lastUserID = 0;
 var loggedUserID = 0;
 var checkedID = 0;
 var lastExpenceID = 0;
+var lastIncomeID = 0;
 
 $(document).ready(function(){
 	
 	loadUsersFromLocalStorage();
 });
+//localStorage.removeItem("Income1");
+//localStorage.removeItem("Income7");
 
 $('#register').on('click', function(){
 	signUpAUser();
@@ -42,6 +46,10 @@ $('#addExpenceButton').on('click',function(){
 	addNewExpence();
 });
 
+$('#addIncomeButton').on('click',function(){
+	addNewIncome();
+});
+
 $('#escape').on('click', function(){
 	loggedUserID = 0;
 	var endOfArrayExpences = expencesObj.length;
@@ -56,10 +64,14 @@ $('#showStorage').on('click', function(){
 	showExpenceStorage();
 });
 
+$('#showIncomeStorage').on('click', function(){
+	showIncomeStorage();
+});
+
 $('#escapeIncomes').on('click', function(){
 	loggedUserID = 0;
-	//var endOfArrayExpences = expencesObj.length;
-	//expencesObj.splice(0,endOfArrayExpences);
+	var endOfArrayIncomes = incomesObj.length;
+	incomesObj.splice(0,endOfArrayIncomes);
 	location.reload();
 	$("#name").val("");
 	$("#password").val("");
@@ -187,6 +199,7 @@ function singUserIn()
 		alert("You have been successfully logged in!");
 		//sessionStorage.setItem("UserID", loggedUserID);
 		loadExpencesOfLoggedUser();
+		loadIncomesOfLoggedUser();
 		showMenu();
 	}
 	else alert("This login dosen't exist");
@@ -372,4 +385,130 @@ function showIncomesManager()
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
 	$('.incomesContainer').css('display','block');
+}
+
+function addNewIncome()
+{
+	
+	lastIncomeID++;
+	var IncomeInArray = {
+		id: 0,
+		userId: 0,
+		amount: "",
+		date: "",
+		category: "",
+		comment: ""
+	};
+	var amount;
+	amount = $('#incomeAmount').val();
+	var date;
+	date = $('#dateIncome').val();
+	var category;
+	category = $("input[type=radio][name=incomeCategory]:checked").val();
+	var comment;
+	comment = $('#commentIncome').val();
+	var string = lastIncomeID.toString()+"/"+ loggedUserID.toString()+"/"+ amount +"/"+date+"/"+category+"/"+comment+"/";
+	
+	
+	IncomeInArray.id = lastIncomeID;
+	IncomeInArray.userId = loggedUserID;
+	IncomeInArray.amount = amount;
+	IncomeInArray.date = date;
+	IncomeInArray.category = category;
+	IncomeInArray.comment = comment;
+	incomesObj.push(IncomeInArray);
+	
+	var nameOfIncome = "Income" + lastIncomeID.toString();
+	var valueOfIncome = string;
+	localStorage.setItem(nameOfIncome, valueOfIncome);
+	
+	alert("Dodałeś nowy przychód!");
+	
+	$('#incomeAmount').val("");
+	$('#dateIncome').val("");
+	$('#commentIncome').val("");
+	
+}
+function loadIncomesOfLoggedUser()
+{
+	for(var i=0; i<localStorage.length; i++){
+		loadIncomestoArray(i);
+	}
+
+	incomesObj.sort(function(a, b){return a.id - b.id;});
+	
+}
+function loadIncomestoArray(i)
+{
+	var nameOfValue = localStorage.key(i); 
+	if(nameOfValue.charAt(0)=='I'){	
+		var valueOfName = localStorage.getItem(nameOfValue);
+		getIncomeDataFromStringWithDashes(valueOfName);
+	}
+}
+function getIncomeDataFromStringWithDashes(valueOfName)
+{
+	var dashCounter = 0;
+	var string = "";
+	var IncomeInArray = {
+		id: 0,
+		userId: 0,
+		amount: "",
+		date: "",
+		category: "",
+		comment: ""
+	};
+	for(var i=0; i<valueOfName.length; i++)
+	{
+		if(valueOfName.charAt(i) != "/"){
+			string = string + valueOfName.substr(i,1);
+		}
+		if(valueOfName.charAt(i) == '/')
+		{
+	
+			switch(dashCounter)
+			{
+				case 0: IncomeInArray.id = parseInt(string); 
+					if(lastIncomeID<IncomeInArray.id)
+						lastIncomeID = IncomeInArray.id; 
+					
+					string = ""; break;
+				case 1: IncomeInArray.userId = parseInt(string); string = ""; 
+					if(IncomeInArray.userId != loggedUserID) return;
+				break;
+				case 2: IncomeInArray.amount = parseInt(string); string = ""; break;
+				case 3: IncomeInArray.date = string; string = ""; break;
+				case 4: IncomeInArray.category = string; string = ""; break;
+				case 5: IncomeInArray.comment = string; string = ""; break;
+			}
+			dashCounter++;
+		}
+		if (dashCounter == 6)
+		{
+			incomesObj.push(IncomeInArray);
+		}
+	}
+}
+
+function showIncomeStorage(){
+	var incomeData = "";
+	
+	for(var i=0; i<incomesObj.length; i++){
+		incomeData = incomeData + addIncomeData(i) + "</br>";
+	}
+	
+	if(incomeData == "") $('.incomesContainer').html("niestety incomesObj jest puste");
+	
+	$('.incomesContainer').html(incomeData);
+}
+function addIncomeData(i)
+{
+	var string = "";
+	string = string +" "+ incomesObj[i].id.toString();
+	string = string +" "+ incomesObj[i].userId.toString();
+	string = string +" "+ incomesObj[i].amount;
+	string = string +" "+ incomesObj[i].date;
+	string = string +" "+ incomesObj[i].category;
+	string = string +" "+ incomesObj[i].comment;
+	return string;
 }
