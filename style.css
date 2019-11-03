@@ -274,4 +274,19 @@ a:active
 	margin: 0px 10px;
 	min-width:200px;
 }
-
+.incomesContainer
+{
+	display:none;
+	height:600px;
+	width:700px;
+	border-radius:10px;
+	margin-top:30px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#3c4091;
+	position:static;
+}
+#commentIncome
+{
+	margin-bottom:210px;
+}
