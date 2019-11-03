@@ -84,7 +84,7 @@ a:active
 .indexButton:hover
 {
 	cursor:pointer;
-	background-color:#f7d197;
+	background-color:#f2923f;
 	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
 	-moz-box-shadow: 2px 2px 2px 2px #20206b;
 	box-shadow: 2px 2px 2px 1px #20206b;
@@ -289,4 +289,32 @@ a:active
 #commentIncome
 {
 	margin-bottom:210px;
+}
+.setupContainer
+{
+	display:none;
+	height:600px;
+	width:700px;
+	border-radius:10px;
+	margin-top:30px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#3c4091;
+	position:static;
+}
+.functionList
+{
+	width:200px;
+	height:560px;
+	background:#bd9777;
+	float:left;
+	border-radius:10px;
+}
+.setupFunction
+{
+	width:500px;
+	height:560px;
+	background:#917f70;
+	float:left;
+	border-radius:10px;
 }

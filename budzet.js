@@ -42,6 +42,11 @@ $('#incomes').on('click',function(){
 	showIncomesManager();
 });
 
+$('#setup').on('click',function(){
+	
+	showSetupManager();
+});
+
 $('#addExpenceButton').on('click',function(){
 	addNewExpence();
 });
@@ -235,17 +240,16 @@ function addData(i)
 	return string;
 }
 
-function showMenu()
-{
+function showMenu(){
 	$('.register').css('display','none');
 	$('.menu').css('display', 'block');
 }
 
-function showExpenceManager()
-{
+function showExpenceManager(){
 	$('.expenceContainer').css('display','block');
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','none');
 }
 function loadExpencesOfLoggedUser()
@@ -383,16 +387,15 @@ function addExpenceData(i)
 	string = string +" "+ expencesObj[i].comment;
 	return string;
 }
-function showIncomesManager()
-{
+function showIncomesManager(){
 	$('.expenceContainer').css('display','none');
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','block');
 }
 
-function addNewIncome()
-{
+function addNewIncome(){
 	
 	lastIncomeID++;
 	var IncomeInArray = {
@@ -435,8 +438,7 @@ function addNewIncome()
 	$('#commentIncome').val("");
 	
 }
-function loadIncomesOfLoggedUser()
-{
+function loadIncomesOfLoggedUser(){
 	for(var i=0; i<localStorage.length; i++){
 		loadIncomestoArray(i);
 	}
@@ -444,16 +446,14 @@ function loadIncomesOfLoggedUser()
 	incomesObj.sort(function(a, b){return a.id - b.id;});
 	
 }
-function loadIncomestoArray(i)
-{
+function loadIncomestoArray(i){
 	var nameOfValue = localStorage.key(i); 
 	if(nameOfValue.charAt(0)=='I'){	
 		var valueOfName = localStorage.getItem(nameOfValue);
 		getIncomeDataFromStringWithDashes(valueOfName);
 	}
 }
-function getIncomeDataFromStringWithDashes(valueOfName)
-{
+function getIncomeDataFromStringWithDashes(valueOfName){
 	var dashCounter = 0;
 	var string = "";
 	var IncomeInArray = {
@@ -497,8 +497,7 @@ function getIncomeDataFromStringWithDashes(valueOfName)
 		}
 	}
 }
-function changeCommasToDots(string)
-{
+function changeCommasToDots(string){
 	var newString = "";
 	for(var i=0; i<string.length; i++)
 	{
@@ -523,8 +522,7 @@ function showIncomeStorage(){
 	
 	$('.incomesContainer').html(incomeData);
 }
-function addIncomeData(i)
-{
+function addIncomeData(i){
 	var string = "";
 	string = string +" "+ incomesObj[i].id.toString();
 	string = string +" "+ incomesObj[i].userId.toString();
@@ -533,4 +531,11 @@ function addIncomeData(i)
 	string = string +" "+ incomesObj[i].category;
 	string = string +" "+ incomesObj[i].comment;
 	return string;
+}
+function showSetupManager(){
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'block');
+	$('.incomesContainer').css('display','none');
 }
