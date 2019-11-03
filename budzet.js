@@ -145,8 +145,8 @@ function signUpAUser()
 		email: ""
 	};
 	if(checkIfLoginIsValid(loginValue)){
-		if(passwordValue == '') {alert("Please write the password"); return;}
-		if(emailValue == '') {alert("Please write your email"); return;}
+		if(passwordValue == '') {alert("Proszę wpisać hasło"); return;}
+		if(emailValue == '') {alert("Proszę wpisać poprawny adres email"); return;}
 		lastUserID++;
 		var nameOfUser = "User" + lastUserID.toString();
 		var userRecord = lastUserID.toString() +'/'+loginValue+'/'+passwordValue+'/'+emailValue+'/';
@@ -159,17 +159,17 @@ function signUpAUser()
 		usersObj.push(UserInArray);
 		
 		localStorage.setItem(nameOfUser, userRecord);
-		alert("You are successfully signed up!");
+		alert("Zostałeś zarejestrowany!");
 	}
 }
 function checkIfLoginIsValid(loginValue){
 	if(loginValue == "") {
-		alert("Please enter your login");
+		alert("Wpisz swój login");
 		return false;
 	}
 	else {
 			for(var i=0; i<usersObj.length; i++){
-				if(checkifLoginAlreadyExist(i, loginValue)) { alert("This login already exist");
+				if(checkifLoginAlreadyExist(i, loginValue)) { alert("Ten login już istnieje. Proszę wybrać inny login.");
 					return false;
 				}
 		}
@@ -187,22 +187,22 @@ function singUserIn()
 	var passwordValue = document.getElementById("password").value;
 	var emailValue = document.getElementById("email").value;
 	if(loginValue == "") {
-		alert("Enter your login"); 
+		alert("Wpisz swój login"); 
 		return;
 	}
 	else if(checkLogin(loginValue)) {
-		if(passwordValue == '') {alert("Please write the password"); return;}
-		if(emailValue == '') {alert("Please write your email"); return;}
-		if(passwordValue != usersObj[checkedID-1].password) {alert("Wrong password"); return;}
-		if(emailValue != usersObj[checkedID-1].email) {alert("Wrong email"); return;}
+		if(passwordValue == '') {alert("Proszę wpisać hasło"); return;}
+		if(emailValue == '') {alert("Proszę wpisać prawidłowy adres email"); return;}
+		if(passwordValue != usersObj[checkedID-1].password) {alert("Podano błędne hasło"); return;}
+		if(emailValue != usersObj[checkedID-1].email) {alert("Podano błędny adres email"); return;}
 		loggedUserID = checkedID;
-		alert("You have been successfully logged in!");
+		alert("Zostałeś zalogowany!");
 		//sessionStorage.setItem("UserID", loggedUserID);
 		loadExpencesOfLoggedUser();
 		loadIncomesOfLoggedUser();
 		showMenu();
 	}
-	else alert("This login dosen't exist");
+	else alert("Podany login nie istnieje!");
 }
 function checkLogin(loginValue)
 {
@@ -296,7 +296,9 @@ function getExpenceDataFromStringWithDashes(valueOfName)
 				case 1: ExpenceInArray.userId = parseInt(string); string = ""; 
 					if(ExpenceInArray.userId != loggedUserID) return;
 				break;
-				case 2: ExpenceInArray.amount = parseInt(string); string = ""; break;
+				case 2: 
+					string = changeCommasToDots(string);
+					ExpenceInArray.amount = parseFloat(string); string = ""; break;
 				case 3: ExpenceInArray.date = string; string = ""; break;
 				case 4: ExpenceInArray.payment = string; string = ""; break;
 				case 5: ExpenceInArray.source = string; string = ""; break;
@@ -325,8 +327,10 @@ function addNewExpence()
 	};
 	var amount;
 	amount = $('#amount').val();
+	if(amount == '') {alert("Proszę podaj rozmiar wydatku"); return;}
 	var date;
 	date = $('#dateExpence').val();
+	if(date == '') {alert("Proszę podaj datę"); return;}
 	var wayOfPayment;
 	wayOfPayment = $("input[type=radio][name=payment]:checked").val();
 	var category;
@@ -401,8 +405,10 @@ function addNewIncome()
 	};
 	var amount;
 	amount = $('#incomeAmount').val();
+	if(amount == '') {alert("Proszę podaj rozmiar przychodu"); return;}
 	var date;
 	date = $('#dateIncome').val();
+	if(amount == '') {alert("Proszę podaj datę przychodu"); return;}
 	var category;
 	category = $("input[type=radio][name=incomeCategory]:checked").val();
 	var comment;
@@ -476,7 +482,9 @@ function getIncomeDataFromStringWithDashes(valueOfName)
 				case 1: IncomeInArray.userId = parseInt(string); string = ""; 
 					if(IncomeInArray.userId != loggedUserID) return;
 				break;
-				case 2: IncomeInArray.amount = parseInt(string); string = ""; break;
+				case 2: 
+					string = changeCommasToDots(string);
+					IncomeInArray.amount = parseFloat(string); string = ""; break;
 				case 3: IncomeInArray.date = string; string = ""; break;
 				case 4: IncomeInArray.category = string; string = ""; break;
 				case 5: IncomeInArray.comment = string; string = ""; break;
@@ -488,6 +496,20 @@ function getIncomeDataFromStringWithDashes(valueOfName)
 			incomesObj.push(IncomeInArray);
 		}
 	}
+}
+function changeCommasToDots(string)
+{
+	var newString = "";
+	for(var i=0; i<string.length; i++)
+	{
+		if(string.charAt(i)==',')
+		{
+			newString += '.';
+			i++;
+		}
+		newString = newString + string.substr(i,1);
+	}
+	return newString;
 }
 
 function showIncomeStorage(){
