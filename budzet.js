@@ -82,6 +82,9 @@ $('#escapeIncomes').on('click', function(){
 	$("#password").val("");
 	$("#email").val("");
 });
+$('#listLoginChange').on('click', function(){
+	showChangeLoginDataFeature();
+});
 function loadUsersFromLocalStorage()
 {
 	if(localStorage.length>=1){
@@ -538,4 +541,7 @@ function showSetupManager(){
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'block');
 	$('.incomesContainer').css('display','none');
+}
+function showChangeLoginDataFeature(){
+	$('#loginSetup').css('display', 'block');
 }

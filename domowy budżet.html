@@ -196,8 +196,40 @@
 					</div>
 					<div class="setupFunctions">
 						<div class="functionList">
+							<div class="listPos" id="listLoginChange">
+								Zmiana danych logowania
+							</div>
+							<div class="listPos">
+								Edytowanie menu wydatków
+							</div>
+							<div class="listPos">
+								Edytowanie menu przychodów
+							</div>
+							<div class="listPos">
+								Usuwanie wybranych wpisów
+							</div>
 						</div>
-						<div class="setupFunction">
+						<div class="setupFunction" >
+						<div id="loginSetup">
+							<div class="functionInterface" >
+								<h4>Wpisz nowy login</h4>
+								<input type="text" id="loginChange" class="inputtextChange" placeholder="login" onfocus="this.placeholder=''" onblur="this.placeholder='login'"/>
+								<input type="button" class="indexButton" id="changeLoginButton" value="Zmień login">
+							</div>
+							<div class="functionInterface" >
+								<h4>Wpisz nowe hasło</h4>
+								<input type="text" id="passwordChange" class="inputtextChange" placeholder="hasło" onfocus="this.placeholder=''" onblur="this.placeholder='hasło'"/>
+								<input type="button" class="indexButton" id="changePasswordButton" value="Zmień hasło">
+							</div>
+							<div class="functionInterface" >
+								<h4>Wpisz nowy email</h4>
+								<input type="text" id="emailChange" class="inputtextChange" placeholder="email" onfocus="this.placeholder=''" onblur="this.placeholder='email'"/>
+								<input type="button" class="indexButton" id="changeEmailButton" value="Zmień email">
+							</div>
+							<div class="functionInterface">
+								<input type="button" class="setupButton" id="escapeSetup" value="Powrót do menu głównego">
+							</div>
+						</div>
 						</div>
 					</div>
 			</div>
