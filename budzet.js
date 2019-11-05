@@ -82,8 +82,16 @@ $('#escapeIncomes').on('click', function(){
 	$("#password").val("");
 	$("#email").val("");
 });
+
 $('#listLoginChange').on('click', function(){
 	showChangeLoginDataFeature();
+});
+
+$('#changeLoginButton').on('click', function(){
+	changeLoginOfLoggedUser();
+});
+$('#escapeSetup').on('click', function(){
+	showMenu();
 });
 function loadUsersFromLocalStorage()
 {
@@ -246,6 +254,7 @@ function addData(i)
 function showMenu(){
 	$('.register').css('display','none');
 	$('.menu').css('display', 'block');
+	$('.setupContainer').css('display', 'none');
 }
 
 function showExpenceManager(){
@@ -544,4 +553,48 @@ function showSetupManager(){
 }
 function showChangeLoginDataFeature(){
 	$('#loginSetup').css('display', 'block');
+}
+function changeLoginOfLoggedUser(){
+	if($('#loginChange').val()=="") {alert("Nie podałeś loginu do zmiany"); return;}
+	for(var i=0; i<localStorage.length; i++){
+		var nameOfValue = localStorage.key(i); 	
+		if(nameOfValue.charAt(0)=='U'){
+			var lastChar = nameOfValue.length - 1;
+			if(nameOfValue.charAt(lastChar)==loggedUserID){
+				var valueOfName = localStorage.getItem(nameOfValue);
+				changeLocalStorage(valueOfName, nameOfValue);
+				return;
+			}
+		}
+	}
+}
+localStorage.removeItem('undefined');
+function changeLocalStorage(valueOfName,nameOfValue){
+	var dashCounter = 0;
+	var string = "";
+	var stringAfterChange = "";
+	for(var i=0; i<valueOfName.length; i++){
+		if(valueOfName.charAt(i) != '/'){
+			string = string + valueOfName.substr(i,1);
+		}
+		if(valueOfName.charAt(i) == '/')
+		{
+	
+				if(dashCounter == 1){
+				string = ""; 
+				stringAfterChange = stringAfterChange + $('#loginChange').val() +'/'
+				}
+				else{ 
+				stringAfterChange = stringAfterChange + string +'/'
+				string = ""; 
+				}
+			
+			dashCounter++;
+		}
+		if(dashCounter==4){
+			localStorage.setItem(nameOfValue,stringAfterChange);
+			alert("login został zmianiony!");
+			$('#loginChange').val("");
+		}
+	}
 }
