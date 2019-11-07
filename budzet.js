@@ -90,6 +90,12 @@ $('#listLoginChange').on('click', function(){
 $('#changeLoginButton').on('click', function(){
 	changeLoginOfLoggedUser();
 });
+$('#changePasswordButton').on('click', function(){
+	changePasswordOfLoggedUser();
+});
+$('#changeEmailButton').on('click', function(){
+	changeEmailOfLoggedUser();
+});
 $('#escapeSetup').on('click', function(){
 	showMenu();
 });
@@ -562,14 +568,14 @@ function changeLoginOfLoggedUser(){
 			var lastChar = nameOfValue.length - 1;
 			if(nameOfValue.charAt(lastChar)==loggedUserID){
 				var valueOfName = localStorage.getItem(nameOfValue);
-				changeLocalStorage(valueOfName, nameOfValue);
+				changeLoginInLocalStorage(valueOfName, nameOfValue);
 				return;
 			}
 		}
 	}
 }
-localStorage.removeItem('undefined');
-function changeLocalStorage(valueOfName,nameOfValue){
+
+function changeLoginInLocalStorage(valueOfName,nameOfValue){
 	var dashCounter = 0;
 	var string = "";
 	var stringAfterChange = "";
@@ -593,8 +599,94 @@ function changeLocalStorage(valueOfName,nameOfValue){
 		}
 		if(dashCounter==4){
 			localStorage.setItem(nameOfValue,stringAfterChange);
-			alert("login został zmianiony!");
+			alert("login został zmieniony!");
 			$('#loginChange').val("");
+		}
+	}
+}
+function changePasswordOfLoggedUser(){
+	if($('#passwordChange').val()=="") {alert("Nie podałeś hasła do zmiany"); return;}
+	for(var i=0; i<localStorage.length; i++){
+		var nameOfValue = localStorage.key(i); 	
+		if(nameOfValue.charAt(0)=='U'){
+			var lastChar = nameOfValue.length - 1;
+			if(nameOfValue.charAt(lastChar)==loggedUserID){
+				var valueOfName = localStorage.getItem(nameOfValue);
+				changePasswordInLocalStorage(valueOfName, nameOfValue);
+				return;
+			}
+		}
+	}
+}
+function changePasswordInLocalStorage(valueOfName,nameOfValue){
+	var dashCounter = 0;
+	var string = "";
+	var stringAfterChange = "";
+	for(var i=0; i<valueOfName.length; i++){
+		if(valueOfName.charAt(i) != '/'){
+			string = string + valueOfName.substr(i,1);
+		}
+		if(valueOfName.charAt(i) == '/')
+		{
+	
+				if(dashCounter == 2){
+				string = ""; 
+				stringAfterChange = stringAfterChange + $('#passwordChange').val() +'/'
+				}
+				else{ 
+				stringAfterChange = stringAfterChange + string +'/'
+				string = ""; 
+				}
+			
+			dashCounter++;
+		}
+		if(dashCounter==4){
+			localStorage.setItem(nameOfValue,stringAfterChange);
+			alert("hasło zostało zmienione!");
+			$('#passwordChange').val("");
+		}
+	}
+}
+function changeEmailOfLoggedUser(){
+	if($('#emailChange').val()=="") {alert("Nie podałeś adresu email do zmiany"); return;}
+	for(var i=0; i<localStorage.length; i++){
+		var nameOfValue = localStorage.key(i); 	
+		if(nameOfValue.charAt(0)=='U'){
+			var lastChar = nameOfValue.length - 1;
+			if(nameOfValue.charAt(lastChar)==loggedUserID){
+				var valueOfName = localStorage.getItem(nameOfValue);
+				changeEmailInLocalStorage(valueOfName, nameOfValue);
+				return;
+			}
+		}
+	}
+}
+function changeEmailInLocalStorage(valueOfName,nameOfValue){
+	var dashCounter = 0;
+	var string = "";
+	var stringAfterChange = "";
+	for(var i=0; i<valueOfName.length; i++){
+		if(valueOfName.charAt(i) != '/'){
+			string = string + valueOfName.substr(i,1);
+		}
+		if(valueOfName.charAt(i) == '/')
+		{
+	
+				if(dashCounter == 3){
+				string = ""; 
+				stringAfterChange = stringAfterChange + $('#emailChange').val() +'/'
+				}
+				else{ 
+				stringAfterChange = stringAfterChange + string +'/'
+				string = ""; 
+				}
+			
+			dashCounter++;
+		}
+		if(dashCounter==4){
+			localStorage.setItem(nameOfValue,stringAfterChange);
+			alert("adres email został zmieniony!");
+			$('#emailChange').val("");
 		}
 	}
 }
