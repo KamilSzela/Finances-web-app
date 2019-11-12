@@ -84,7 +84,8 @@ $('#escapeIncomes').on('click', function(){
 });
 
 $('#listLoginChange').on('click', function(){
-	showChangeLoginDataFeature();
+	$('#loginSetup').css('display', 'block');
+	$('#expenceMenuSetup').css('display', 'none');
 });
 
 $('#changeLoginButton').on('click', function(){
@@ -95,6 +96,18 @@ $('#changePasswordButton').on('click', function(){
 });
 $('#changeEmailButton').on('click', function(){
 	changeEmailOfLoggedUser();
+});
+$('#listExpenceChange').on('click', function(){
+	$('#loginSetup').css('display', 'none');
+	$('#expenceMenuSetup').css('display', 'block');
+	loadPaymentWaysToDiv();
+});
+$('#addPaymentWayButton').on('click', function(){
+	addNewMethodOfPayment();
+});
+
+$('#deleteMethodButton').on('click', function(){
+	deleteMethodOfPayment();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -557,9 +570,7 @@ function showSetupManager(){
 	$('.setupContainer').css('display', 'block');
 	$('.incomesContainer').css('display','none');
 }
-function showChangeLoginDataFeature(){
-	$('#loginSetup').css('display', 'block');
-}
+
 function changeLoginOfLoggedUser(){
 	if($('#loginChange').val()=="") {alert("Nie podałeś loginu do zmiany"); return;}
 	for(var i=0; i<localStorage.length; i++){
@@ -588,10 +599,10 @@ function changeLoginInLocalStorage(valueOfName,nameOfValue){
 	
 				if(dashCounter == 1){
 				string = ""; 
-				stringAfterChange = stringAfterChange + $('#loginChange').val() +'/'
+				stringAfterChange = stringAfterChange + $('#loginChange').val() +'/';
 				}
 				else{ 
-				stringAfterChange = stringAfterChange + string +'/'
+				stringAfterChange = stringAfterChange + string +'/';
 				string = ""; 
 				}
 			
@@ -631,10 +642,10 @@ function changePasswordInLocalStorage(valueOfName,nameOfValue){
 	
 				if(dashCounter == 2){
 				string = ""; 
-				stringAfterChange = stringAfterChange + $('#passwordChange').val() +'/'
+				stringAfterChange = stringAfterChange + $('#passwordChange').val() +'/';
 				}
 				else{ 
-				stringAfterChange = stringAfterChange + string +'/'
+				stringAfterChange = stringAfterChange + string +'/';
 				string = ""; 
 				}
 			
@@ -674,10 +685,10 @@ function changeEmailInLocalStorage(valueOfName,nameOfValue){
 	
 				if(dashCounter == 3){
 				string = ""; 
-				stringAfterChange = stringAfterChange + $('#emailChange').val() +'/'
+				stringAfterChange = stringAfterChange + $('#emailChange').val() +'/';
 				}
 				else{ 
-				stringAfterChange = stringAfterChange + string +'/'
+				stringAfterChange = stringAfterChange + string +'/';
 				string = ""; 
 				}
 			
@@ -689,4 +700,47 @@ function changeEmailInLocalStorage(valueOfName,nameOfValue){
 			$('#emailChange').val("");
 		}
 	}
+}
+function addNewMethodOfPayment(){
+	var addedMethod = $('#addPayment').val();
+	addedMethod=deleteSpaces(addedMethod);
+	 $('#paymentWay').append("<div class=\"kol\" id="+addedMethod+"><label><input type='radio' value=\""+ addedMethod +"\" name='payment' checked>"+ addedMethod +"</label></div>");
+	 alert("Dodano nową metodę płatności");
+	
+}
+function deleteSpaces(addedMethod){
+	var string = "";
+	for(var i=0; i<addedMethod.length; i++){
+		if(addedMethod.charAt(i)==" ") continue;
+		string = string + addedMethod.substr(i,1);
+	}
+	return string;
+}
+function loadPaymentWaysToDiv(){
+	
+		var methods = $('#paymentWay').html();
+		$('#expenceMethodDelete').html("");
+		var string = "";
+		var methodsString = "<fieldset id=\"deletePaymentWay\">";
+		for(var i=0; i<methods.length; i++){
+			string = string + methods.substr(i,1);
+			if(methods.charAt(i)==" "){
+				var beginnigString = string.substr(0,3);
+				if(beginnigString == "val"){
+					var endOfIDName=string.length-2;
+					var idToDelete = string.substring(7,endOfIDName);
+					methodsString+="<div><input type=\"radio\" name=\"expenceDelete\" value="+idToDelete+">"+idToDelete+"</div>";
+				}
+				string="";
+			}
+		}
+		methodsString+="</fieldset>";
+		$('#expenceMethodDelete').append(methodsString);
+	
+}
+function deleteMethodOfPayment(){
+	var wayOfPayment = $("input[type=radio][name=expenceDelete]:checked").val();
+	var element = document.getElementById(wayOfPayment);
+    element.parentNode.removeChild(element);
+	alert("Usunięto wybraną metodę płatności");
 }

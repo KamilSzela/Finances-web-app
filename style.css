@@ -403,3 +403,18 @@ h4
 	-moz-box-shadow: 2px 2px 2px 2px #20206b;
 	box-shadow: 2px 2px 2px 1px #20206b;
 }
+#expenceMenuSetup
+{
+	width:500px;
+	height:485px;
+	background:#917f70;
+	float:left;
+	border-radius:10px;
+	display:none;
+}
+#buttonDiv
+{
+	position:absolute;
+	top:480px;
+	left:245px;
+}
