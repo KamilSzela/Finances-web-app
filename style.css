@@ -275,7 +275,7 @@ a:active
 {
 	display:inline-block;
 	margin: 0px 10px;
-	min-width:200px;
+	min-width:190px;
 }
 .incomesContainer
 {
@@ -403,6 +403,23 @@ h4
 	-moz-box-shadow: 2px 2px 2px 2px #20206b;
 	box-shadow: 2px 2px 2px 1px #20206b;
 }
+.changeButton2
+{
+	height: 30px;
+	width: 115px;
+	margin-left: 7px;
+	margin-top: 17px;
+	outline: none;
+	float: left;
+}
+.changeButton2:hover
+{
+	cursor:pointer;
+	background-color:#f2923f;
+	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
+	-moz-box-shadow: 2px 2px 2px 2px #20206b;
+	box-shadow: 2px 2px 2px 1px #20206b;
+}
 #expenceMenuSetup
 {
 	width:500px;
@@ -412,9 +429,27 @@ h4
 	border-radius:10px;
 	display:none;
 }
+#addPayment
+{
+	width: 150px;
+	height: 25px;
+	float:left;
+	font-size:18px;
+}
 #buttonDiv
 {
 	position:absolute;
 	top:480px;
 	left:245px;
+}
+#expenceMethodDelete
+{
+	float:left;
+	width:190px;
+}
+.addedMethod
+{
+	display:inline-block;
+	min-width:180px;
+	margin:0px 10px;
 }

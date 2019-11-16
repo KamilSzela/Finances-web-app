@@ -3,7 +3,7 @@
 <head>
 
 	<meta charset="utf-8">
-	<title>Domowy budżet</title>
+	<title>Bezpożyczek</title>
 	<meta name="description" content="Aplikacja internetowa służąca do planowania domowego budżetu">
 	<meta name="keywords" content="budżet, wydatki, przychody, pieniądze, bilans, zarzadzanie, aplikacja, internetowa">
 	<meta name="author" content="Kamil Szela">
@@ -85,13 +85,13 @@
 						
 					</div>
 					
-					<div class="row">
+					<div class="row" >
 						<fieldset id="paymentWay">
 						<legend> Sposób płatności </legend>
-						<div class="kol">
+						<div class="kol" id="paymentWayList">
 							<div id="Gotówka"><label><input type="radio" value="Gotówka" name="payment" checked> Gotówka </label></div>
-							<div id="KartaDebetowa"><label><input type="radio"  value="KartaDebetowa" name="payment"> Karta debetowa </label></div>
-							<div id="KartaKredytowa"><label><input type="radio"  value="KartaKredytowa" name="payment"> Karta kredytowa </label></div>
+							<div id="KartaDebetowa"><label><input type="radio"  value="Karta Debetowa" name="payment"> Karta debetowa </label></div>
+							<div id="KartaKredytowa"><label><input type="radio"  value="Karta Kredytowa" name="payment"> Karta kredytowa </label></div>
 						</div>	
 						</fieldset>
 					</div>
@@ -101,31 +101,32 @@
 						<legend>Kategoria</legend>
 						
 						<div class="kol">
-							<div><label><input type="radio" name="cat" value="Jedzenie">Jedzenie</label></div>
-							<div><label><input type="radio" name="cat" value="Mieszkanie">Mieszkanie</label></div>
-							<div><label><input type="radio" name="cat" value="Transport">Transport</label></div>
-							<div><label><input type="radio" name="cat" value="Telekomunikacja">Telekomunikacja</label></div>
+							<div id="Jedzenie"><label><input type="radio" name="cat" value="Jedzenie">Jedzenie</label></div>
+							<div id="Mieszkanie"><label><input type="radio" name="cat" value="Mieszkanie">Mieszkanie</label></div>
+							<div id="Transport"><label><input type="radio" name="cat" value="Transport">Transport</label></div>
+							<div id="Telekomunikacja"><label><input type="radio" name="cat" value="Telekomunikacja">Telekomunikacja</label></div>
 						</div>
 						<div class="kol">
-							<div><label><input type="radio" name="cat" value="Opieka zdrowotna">Opieka zdrowotna</label></div>
-							<div><label><input type="radio" name="cat" value="Ubranie">Ubranie</label></div>
-							<div><label><input type="radio" name="cat" value="Higiena">Higiena</label></div>
-							<div><label><input type="radio" name="cat" value="Dzieci">Dzieci</label></div>
+							<div id="Opiekazdrowotna"><label><input type="radio" name="cat" value="Opieka zdrowotna">Opieka zdrowotna</label></div>
+							<div id="Ubranie"><label><input type="radio" name="cat" value="Ubranie">Ubranie</label></div>
+							<div id="Higiena"><label><input type="radio" name="cat" value="Higiena">Higiena</label></div>
+							<div id="Dzieci"><label><input type="radio" name="cat" value="Dzieci">Dzieci</label></div>
 						</div>
 						<div class="kol">
-							<div><label><input type="radio" name="cat" value="Rozrywka">Rozrywka</label></div>
-							<div><label><input type="radio" name="cat" value="Wycieczka">Wycieczka</label></div>
-							<div><label><input type="radio" name="cat" value="Szkolenia">Szkolenia</label></div>
-							<div><label><input type="radio" name="cat" value="Książki">Książki</label></div>
+							<div id="Rozrywka"><label><input type="radio" name="cat" value="Rozrywka">Rozrywka</label></div>
+							<div id="Wycieczka"><label><input type="radio" name="cat" value="Wycieczka">Wycieczka</label></div>
+							<div id="Szkolenia"><label><input type="radio" name="cat" value="Szkolenia">Szkolenia</label></div>
+							<div id="Książki"><label><input type="radio" name="cat" value="Książki">Książki</label></div>
 						</div>
 						<div class="kol">
-							<div><label><input type="radio" name="cat" value="Oszczędności">Oszczędności</label></div>
-							<div><label><input type="radio" name="cat" value="Na złotą jesień, czyli emeryturę">Na złotą jesień, czyli emeryturę</label></div>
-							<div><label><input type="radio" name="cat" value="Spłata długów">Spłata długów</label></div>
-							<div><label><input type="radio" name="cat" value="Darwizna">Darwizna</label></div>
+							<div id="Oszczędności"><label><input type="radio" name="cat" value="Oszczędności">Oszczędności</label></div>
+							<div id="Darowizna"><label><input type="radio" name="cat" value="Darowizna">Darowizna</label></div>
+							<div id="Spłatadługów"> <label><input type="radio" name="cat" value="Spłata długów">Spłata długów</label></div>
+							<div id="Nazłotąjesień,czyliemeryturę"><label><input type="radio" name="cat" value="Na złotą jesień, czyli emeryturę">Na złotą jesień, czyli emeryturę</label></div>
+							<div id="Innewydatki"><label><input type="radio" name="cat" value="Inne wydatki">Inne wydatki</label></div>
 						</div>
 						<div class="kol">
-							<div><label><input type="radio" name="cat" value="Inne wydatki">Inne wydatki</label></div>
+							
 						</div>
 					</fieldset>
 					
@@ -166,7 +167,7 @@
 							<label>Data przychodu<input type="date" placeholder="Podaj datę przychodu" id="dateIncome" class="textInput"></label>
 						
 					</div>
-					<div class="row">
+					<div class="row" >
 						<fieldset id="incomeCategory">
 						<legend> Kategoria przychodu </legend>
 							<div><label><input type="radio" id="salary" value="Wynagrodzenie" name="incomeCategory" checked> Wynagrodzenie </label></div>
@@ -234,13 +235,23 @@
 						<div id="expenceMenuSetup">
 							<h4>Dodawanie nowej metody platności</h4>
 								<input type="text" id="addPayment" class="inputtextChange" />
-								<input type="button" class="changeButton" id="addPaymentWayButton" value="Dodaj metodę">
-							<div >
-							<h4>Usuwanie metody płatności</h4>
+								<input type="button" class="changeButton2" id="addPaymentWayButton" value="Dodaj metodę">
+							<div style="clear:both;"></div>
+							
+							<div>
+								<h4>Usuwanie metody płatności</h4>
 							</div>
-							<div id="expenceMethodDelete"> 
+							<div id="expenceMethodDelete" > 
 							</div>
-							<input type="button" class="changeButton" id="deleteMethodButton" value="Usuń metodę">
+							<input type="button" class="changeButton2" id="deleteMethodButton" value="Usuń metodę">
+							<div style="clear:both;"></div>
+							
+							<div>
+								<h4>Usuwanie kategorii płatności</h4>
+							</div>
+							<div id="expenceCathegoryDelete" > 
+							</div>
+							<input type="button" class="changeButton2" id="deleteCathegoryButton" value="Usuń kategorię">
 						</div>
 						<div class="functionInterface">
 								<input type="button" class="setupButton" id="escapeSetup" value="Powrót do menu głównego">

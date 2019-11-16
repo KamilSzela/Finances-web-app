@@ -7,6 +7,7 @@ var loggedUserID = 0;
 var checkedID = 0;
 var lastExpenceID = 0;
 var lastIncomeID = 0;
+var addedExpenceMethod = 0;
 
 $(document).ready(function(){
 	
@@ -101,6 +102,7 @@ $('#listExpenceChange').on('click', function(){
 	$('#loginSetup').css('display', 'none');
 	$('#expenceMenuSetup').css('display', 'block');
 	loadPaymentWaysToDiv();
+	loadCathegoriesToDiv();
 });
 $('#addPaymentWayButton').on('click', function(){
 	addNewMethodOfPayment();
@@ -703,16 +705,28 @@ function changeEmailInLocalStorage(valueOfName,nameOfValue){
 }
 function addNewMethodOfPayment(){
 	var addedMethod = $('#addPayment').val();
-	addedMethod=deleteSpaces(addedMethod);
-	 $('#paymentWay').append("<div class=\"kol\" id="+addedMethod+"><label><input type='radio' value=\""+ addedMethod +"\" name='payment' checked>"+ addedMethod +"</label></div>");
+	if(addedExpenceMethod==0){
+	 $('#paymentWay').append("<div class=\"kol\" id=\""+addedMethod+"\"><label><input type='radio' value=\""+ addedMethod +"\" name='payment' checked>"+ addedMethod +"</label></div>");
+	 $('#paymentWayList').append("<div style=\"clear:both;\"></div>");
+	 addedExpenceMethod++;
+	 var height = $('.expenceContainer').css('height');
+	 height = parseInt(height) + 15;
+	 var heightSting = height.toString();
+	 $('.expenceContainer').css({height: heightSting +'px'});
+	}
+	else{
+		 $('#paymentWay .kol').last().append("<div id=\""+addedMethod+"\"><label><input type='radio' value=\""+ addedMethod +"\" name='payment' checked>"+ addedMethod +"</label></div>");
+		 addedExpenceMethod++;
+		 if(addedExpenceMethod==3) addedExpenceMethod = 0;
+	}
 	 alert("Dodano nową metodę płatności");
 	
 }
-function deleteSpaces(addedMethod){
+function deleteSpaces(wayOfPayment){
 	var string = "";
-	for(var i=0; i<addedMethod.length; i++){
-		if(addedMethod.charAt(i)==" ") continue;
-		string = string + addedMethod.substr(i,1);
+	for(var i=0; i<wayOfPayment.length; i++){
+		if(wayOfPayment.charAt(i)==" ") continue;
+		string = string + wayOfPayment.substr(i,1);
 	}
 	return string;
 }
@@ -721,26 +735,101 @@ function loadPaymentWaysToDiv(){
 		var methods = $('#paymentWay').html();
 		$('#expenceMethodDelete').html("");
 		var string = "";
+		var quotMarks = false;
 		var methodsString = "<fieldset id=\"deletePaymentWay\">";
 		for(var i=0; i<methods.length; i++){
-			string = string + methods.substr(i,1);
-			if(methods.charAt(i)==" "){
-				var beginnigString = string.substr(0,3);
-				if(beginnigString == "val"){
-					var endOfIDName=string.length-2;
-					var idToDelete = string.substring(7,endOfIDName);
-					methodsString+="<div><input type=\"radio\" name=\"expenceDelete\" value="+idToDelete+">"+idToDelete+"</div>";
+			
+			if(methods.charAt(i)==" " && quotMarks == false) 
+			{
+				var beginnigString = methods.substr(i+1 ,5);
+				if(beginnigString == "value"){
+					quotMarks = true;
+					i=i+8;
+				
 				}
-				string="";
+			}
+			if(quotMarks == true){
+				
+				if(methods.charAt(i) == "\"") {
+					methodsString += "<div><input type=\"radio\" name=\"expenceDelete\" value=\""+string+"\">"+string+"</div>";
+					quotMarks = false;
+					string = "";
+					continue;
+				}
+				string = string + methods.substr(i,1);
 			}
 		}
-		methodsString+="</fieldset>";
+		methodsString += "</fieldset>";
 		$('#expenceMethodDelete').append(methodsString);
+		var positionButton = $('#expenceMethodDelete').css('height');
+		positionButton = (parseInt(positionButton) / 2) - 15;
+		var positionSting = positionButton.toString();
+		$('#deleteMethodButton').css({'margin-top': positionSting +'px'});
 	
 }
 function deleteMethodOfPayment(){
 	var wayOfPayment = $("input[type=radio][name=expenceDelete]:checked").val();
+	wayOfPayment = deleteSpaces(wayOfPayment);
 	var element = document.getElementById(wayOfPayment);
     element.parentNode.removeChild(element);
 	alert("Usunięto wybraną metodę płatności");
+}
+function loadCathegoriesToDiv(){
+	var methods = $('#expenceCategory').html();
+		$('#expenceCathegoryDelete').html("");
+		var string = "";
+		var quotMarks = false;
+		var addedCathegory = 0;
+		var methodsString = "<fieldset id=\"deleteCathegoryWay\"></fieldset>";
+		$('#expenceCathegoryDelete').append(methodsString);
+		methodsString="";
+		for(var i=0; i<methods.length; i++){
+			
+			if(methods.charAt(i)==" " && quotMarks == false) 
+			{
+				var beginnigString = methods.substr(i+1 ,5);
+				if(beginnigString == "value"){
+					quotMarks = true;
+					i=i+8;
+				
+				}
+			}
+			if(quotMarks == true){
+				
+				if(methods.charAt(i) == "\"") {
+					if(addedCathegory % 8 == 0){
+						methodsString += "<div class=\"kol\"><input type=\"radio\" name=\"expenceDelete\" value=\""+string+"\">"+string+"</div>";
+						quotMarks = false;
+						addedCathegory++;
+						string = "";
+						
+						$('#deleteCathegoryWay').append(methodsString);
+						methodsString = "";
+						continue;
+					}
+					else{
+						methodsString += "<div><input type=\"radio\" name=\"expenceDelete\" value=\""+string+"\">"+string+"</div>";
+						quotMarks = false;
+						addedCathegory++;
+						string = "";
+						
+						$('#deleteCathegoryWay .kol').last().append(methodsString);
+						methodsString = "";
+						continue;
+					}
+				}
+				string = string + methods.substr(i,1);
+			}
+		}
+		methodsString += "</fieldset>";
+		//$('#expenceMethodDelete').append(methodsString);
+		//var addHeight = $('#expenceCathegoryDelete').css('height');
+		//addHeight = parseInt(addHeight) + 600;
+		//var positionSting = addHeight.toString();
+		//$('.setupContainer').css({'height': positionSting +'px'});
+		
+		//var positionButton = $('#expenceMethodDelete').css('height');
+		//positionButton = (parseInt(positionButton) / 2) - 15;
+		//var positionSting = positionButton.toString();
+		//$('#deleteMethodButton').css({'margin-top': positionSting +'px'});
 }
