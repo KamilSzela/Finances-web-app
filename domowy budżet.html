@@ -95,7 +95,7 @@
 						</div>	
 						</fieldset>
 					</div>
-					<div class="row">
+					<div class="row" id="paymentCathegoriesListDiv">
 				
 					<fieldset id="expenceCategory">
 						<legend>Kategoria</legend>
@@ -234,7 +234,7 @@
 						</div>
 						<div id="expenceMenuSetup">
 							<h4>Dodawanie nowej metody platności</h4>
-								<input type="text" id="addPayment" class="inputtextChange" />
+								<input type="text" id="addPayment" class="inputTextExpenceChangeSite" />
 								<input type="button" class="changeButton2" id="addPaymentWayButton" value="Dodaj metodę">
 							<div style="clear:both;"></div>
 							
@@ -246,12 +246,18 @@
 							<input type="button" class="changeButton2" id="deleteMethodButton" value="Usuń metodę">
 							<div style="clear:both;"></div>
 							
+							<h4>Dodawanie nowej kategorii platności</h4>
+								<input type="text" id="addExpenceCathegory" class="inputTextExpenceChangeSite" />
+								
+								<input type="button" class="changeButton2" id="addExpenceCathegoryButton" value="Dodaj kategorię">
+							<div style="clear:both;"></div>
+							
 							<div>
 								<h4>Usuwanie kategorii płatności</h4>
 							</div>
 							<div id="expenceCathegoryDelete" > 
 							</div>
-							<input type="button" class="changeButton2" id="deleteCathegoryButton" value="Usuń kategorię">
+							<input type="button" class="changeButton2" id="deleteExpenceCathegoryButton" value="Usuń kategorię">
 						</div>
 						<div class="functionInterface">
 								<input type="button" class="setupButton" id="escapeSetup" value="Powrót do menu głównego">

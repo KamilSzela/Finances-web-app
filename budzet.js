@@ -8,6 +8,7 @@ var checkedID = 0;
 var lastExpenceID = 0;
 var lastIncomeID = 0;
 var addedExpenceMethod = 0;
+var addedExpenceCathegory = 0;
 
 $(document).ready(function(){
 	
@@ -103,6 +104,7 @@ $('#listExpenceChange').on('click', function(){
 	$('#expenceMenuSetup').css('display', 'block');
 	loadPaymentWaysToDiv();
 	loadCathegoriesToDiv();
+	adjustSetupHeight();
 });
 $('#addPaymentWayButton').on('click', function(){
 	addNewMethodOfPayment();
@@ -110,6 +112,12 @@ $('#addPaymentWayButton').on('click', function(){
 
 $('#deleteMethodButton').on('click', function(){
 	deleteMethodOfPayment();
+});
+$('#addExpenceCathegoryButton').on('click', function(){
+	addNewCathegoryOfPayment();
+});
+$('#deleteExpenceCathegoryButton').on('click', function(){
+	deleteCathegoryOfPayment();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -719,8 +727,9 @@ function addNewMethodOfPayment(){
 		 addedExpenceMethod++;
 		 if(addedExpenceMethod==3) addedExpenceMethod = 0;
 	}
-	 alert("Dodano nową metodę płatności");
 	
+	alert("Dodano nową metodę płatności");
+	$('#addPayment').val("");
 }
 function deleteSpaces(wayOfPayment){
 	var string = "";
@@ -798,7 +807,7 @@ function loadCathegoriesToDiv(){
 				
 				if(methods.charAt(i) == "\"") {
 					if(addedCathegory % 8 == 0){
-						methodsString += "<div class=\"kol\"><input type=\"radio\" name=\"expenceDelete\" value=\""+string+"\">"+string+"</div>";
+						methodsString += "<div class=\"kol\"><input type=\"radio\" name=\"expenceMethodDelete\" value=\""+string+"\">"+string+"</div>";
 						quotMarks = false;
 						addedCathegory++;
 						string = "";
@@ -808,7 +817,7 @@ function loadCathegoriesToDiv(){
 						continue;
 					}
 					else{
-						methodsString += "<div><input type=\"radio\" name=\"expenceDelete\" value=\""+string+"\">"+string+"</div>";
+						methodsString += "<div><input type=\"radio\" name=\"expenceMethodDelete\" value=\""+string+"\">"+string+"</div>";
 						quotMarks = false;
 						addedCathegory++;
 						string = "";
@@ -832,4 +841,45 @@ function loadCathegoriesToDiv(){
 		//positionButton = (parseInt(positionButton) / 2) - 15;
 		//var positionSting = positionButton.toString();
 		//$('#deleteMethodButton').css({'margin-top': positionSting +'px'});
+}
+function deleteCathegoryOfPayment(){
+	var cathegoryOfPayment = $("input[type=radio][name=expenceMethodDelete]:checked").val();
+	cathegoryOfPayment = deleteSpaces(cathegoryOfPayment);
+	var element = document.getElementById(cathegoryOfPayment);
+    element.parentNode.removeChild(element);
+	alert("Usunięto wybraną kategorię płatności");
+}
+function addNewCathegoryOfPayment(){
+	var addedCathegory = $('#addExpenceCathegory').val();
+	if(addedExpenceCathegory==0){
+	 $('#expenceCategory').append("<div class=\"kol\" id=\""+addedCathegory+"\"><label><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked>"+ addedCathegory +"</label></div>");
+	 $('#paymentCathegoriesListDiv').append("<div style=\"clear:both;\"></div>");
+	 addedExpenceCathegory++;
+	 // height adding - redirect to new function 
+	 var height = $('.expenceContainer').css('height');
+	 height = parseInt(height) + 15;
+	 var heightSting = height.toString();
+	 $('.expenceContainer').css({height: heightSting +'px'});
+	}
+	else{
+		 $('#expenceCategory .kol').last().append("<div id=\""+addedCathegory+"\"><label><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked>"+ addedCathegory +"</label></div>");
+		 addedExpenceCathegory++;
+		 if(addedExpenceCathegory==4) addedExpenceCathegory = 0;
+	}
+	 alert("Dodano nową kategorię wydatku");
+	 $('#addExpenceCathegory').val("");
+}
+function adjustSetupHeight(){
+	var methodsHeight = $('#expenceMethodDelete').css('height');
+	var cathegoriesHeight = $('#expenceCathegoryDelete').css('height');
+	var heightOfTextInputs = 62;
+	var heightOfHeaders = 192;
+	var totalHeight = parseInt(methodsHeight) + parseInt(cathegoriesHeight) + heightOfHeaders + heightOfTextInputs;
+	if(totalHeight>=500){
+		totalHeight += 180;
+		$('.setupContainer').css({'height': totalHeight.toString() +'px'});
+		totalHeight -= 110;
+		$('#expenceMenuSetup').css({'height': totalHeight.toString() +'px'});
+	}
+	
 }
