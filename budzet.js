@@ -9,6 +9,7 @@ var lastExpenceID = 0;
 var lastIncomeID = 0;
 var addedExpenceMethod = 0;
 var addedExpenceCathegory = 0;
+var addedIncomeCathegory = 0;
 
 $(document).ready(function(){
 	
@@ -87,7 +88,12 @@ $('#escapeIncomes').on('click', function(){
 
 $('#listLoginChange').on('click', function(){
 	$('#loginSetup').css('display', 'block');
+	
+	$('.setupContainer').css({'height': '600px'});
+	$('#expenceMenuSetup').css({'height': '500px'});
+	
 	$('#expenceMenuSetup').css('display', 'none');
+	$('#incomeMenuSetup').css('display', 'none');
 });
 
 $('#changeLoginButton').on('click', function(){
@@ -102,6 +108,7 @@ $('#changeEmailButton').on('click', function(){
 $('#listExpenceChange').on('click', function(){
 	$('#loginSetup').css('display', 'none');
 	$('#expenceMenuSetup').css('display', 'block');
+	$('#incomeMenuSetup').css('display', 'none');
 	loadPaymentWaysToDiv();
 	loadCathegoriesToDiv();
 	adjustSetupHeight();
@@ -118,6 +125,17 @@ $('#addExpenceCathegoryButton').on('click', function(){
 });
 $('#deleteExpenceCathegoryButton').on('click', function(){
 	deleteCathegoryOfPayment();
+});
+$('#listIncomeChange').on('click', function(){
+	$('#loginSetup').css('display', 'none');	
+	$('#expenceMenuSetup').css('display', 'none');
+	$('#incomeMenuSetup').css('display', 'block');
+	$('.setupContainer').css({'height': '600px'});
+	$('#expenceMenuSetup').css({'height': '500px'});
+	loadIncomeCathegoriesToDiv();
+});
+$('#addIncomeCathegoryButton').on('click', function(){
+	addNewCathegoryOfIncome();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -713,6 +731,7 @@ function changeEmailInLocalStorage(valueOfName,nameOfValue){
 }
 function addNewMethodOfPayment(){
 	var addedMethod = $('#addPayment').val();
+	if(addedMethod == "") {alert("Nie wprowadzono nowej metody!"); return;};
 	if(addedExpenceMethod==0){
 	 $('#paymentWay').append("<div class=\"kol\" id=\""+addedMethod+"\"><label><input type='radio' value=\""+ addedMethod +"\" name='payment' checked>"+ addedMethod +"</label></div>");
 	 $('#paymentWayList').append("<div style=\"clear:both;\"></div>");
@@ -844,27 +863,27 @@ function loadCathegoriesToDiv(){
 }
 function deleteCathegoryOfPayment(){
 	var cathegoryOfPayment = $("input[type=radio][name=expenceMethodDelete]:checked").val();
+	$('input[type=radio][name=expenceMethodDelete]:checked').remove();
 	cathegoryOfPayment = deleteSpaces(cathegoryOfPayment);
 	var element = document.getElementById(cathegoryOfPayment);
     element.parentNode.removeChild(element);
+	
 	alert("Usunięto wybraną kategorię płatności");
 }
 function addNewCathegoryOfPayment(){
 	var addedCathegory = $('#addExpenceCathegory').val();
-	if(addedExpenceCathegory==0){
-	 $('#expenceCategory').append("<div class=\"kol\" id=\""+addedCathegory+"\"><label><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked>"+ addedCathegory +"</label></div>");
+	if(addedCathegory == "") {alert("Nie wprowadzono nowej kategorii!"); return;};
+	if(addedExpenceCathegory%3 == 0){
+	 $('#expenceCategory').append("<div class=\"kol\" id=\""+addedCathegory+"\"><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked><label>"+ addedCathegory +"</label></div>");
 	 $('#paymentCathegoriesListDiv').append("<div style=\"clear:both;\"></div>");
+	 if(addedExpenceCathegory%9 == 0){
+		addHeightToExpenceSiteDiv();
+	 }
 	 addedExpenceCathegory++;
-	 // height adding - redirect to new function 
-	 var height = $('.expenceContainer').css('height');
-	 height = parseInt(height) + 15;
-	 var heightSting = height.toString();
-	 $('.expenceContainer').css({height: heightSting +'px'});
 	}
 	else{
-		 $('#expenceCategory .kol').last().append("<div id=\""+addedCathegory+"\"><label><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked>"+ addedCathegory +"</label></div>");
+		 $('#expenceCategory .kol').last().append("<div id=\""+addedCathegory+"\"><input type='radio' value=\""+ addedCathegory +"\" name='cat' checked><label>"+ addedCathegory +"</label></div>");
 		 addedExpenceCathegory++;
-		 if(addedExpenceCathegory==4) addedExpenceCathegory = 0;
 	}
 	 alert("Dodano nową kategorię wydatku");
 	 $('#addExpenceCathegory').val("");
@@ -876,10 +895,67 @@ function adjustSetupHeight(){
 	var heightOfHeaders = 192;
 	var totalHeight = parseInt(methodsHeight) + parseInt(cathegoriesHeight) + heightOfHeaders + heightOfTextInputs;
 	if(totalHeight>=500){
-		totalHeight += 180;
+		totalHeight += 170;
 		$('.setupContainer').css({'height': totalHeight.toString() +'px'});
 		totalHeight -= 110;
 		$('#expenceMenuSetup').css({'height': totalHeight.toString() +'px'});
 	}
 	
+}
+function addHeightToExpenceSiteDiv(){
+	var height = $('.expenceContainer').css('height');
+	 height = parseInt(height) + 60;
+	 var heightSting = height.toString();
+	 $('.expenceContainer').css({height: heightSting +'px'});
+}
+function loadIncomeCathegoriesToDiv(){
+	var methods = $('#incomeCategory').html();
+		$('#incomeCathegoryDelete').html("");
+		var string = "";
+		var quotMarks = false;
+		var methodsString = "<fieldset id=\"deleteIncomeCathegoryFieldset\">";
+		for(var i=0; i<methods.length; i++){
+			
+			if(methods.charAt(i)==" " && quotMarks == false) 
+			{
+				var beginnigString = methods.substr(i+1 ,5);
+				if(beginnigString == "value"){
+					quotMarks = true;
+					i=i+8;
+				
+				}
+			}
+			if(quotMarks == true){
+				
+				if(methods.charAt(i) == "\"") {
+					methodsString += "<div><input type=\"radio\" name=\"incomeDeleteCathegoryInput\" value=\""+string+"\">"+string+"</div>";
+					quotMarks = false;
+					string = "";
+					continue;
+				}
+				string = string + methods.substr(i,1);
+			}
+		}
+		methodsString += "</fieldset>";
+		$('#incomeCathegoryDelete').append(methodsString);
+		var positionButton = $('#incomeCathegoryDelete').css('height');
+		positionButton = (parseInt(positionButton) / 2) - 15;
+		var positionSting = positionButton.toString();
+		$('#deleteIncomeCathegoryButton').css({'margin-top': positionSting +'px'});
+}
+function addNewCathegoryOfIncome(){
+	var addedCathegory = $('#addIncomeCathegoryTextInput').val();
+	if(addedIncomeCathegory==0){
+	 $('#incomeCategory').append("<div class=\"kol\" id=\""+addedCathegory+"\"><input type='radio' value=\""+ addedCathegory +"\" name='incomeCategory' checked><label>"+ addedCathegory +"</label></div>");
+	 $('#paymentCathegoriesListDiv').append("<div style=\"clear:both;\"></div>");
+	 addedIncomeCathegory++;
+	 
+	}
+	else{
+		 $('#incomeCategory .kol').last().append("<div id=\""+addedCathegory+"\"><input type='radio' value=\""+ addedCathegory +"\" name='incomeCategory' checked><label>"+ addedCathegory +"</label></div>");
+		 addedIncomeCathegory++;
+		 if(addedIncomeCathegory==4) addedIncomeCathegory = 0;
+	}
+	 alert("Dodano nową kategorię przychodu");
+	 $('#addIncomeCathegoryTextInput').val("");
 }
