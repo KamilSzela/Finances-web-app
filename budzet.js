@@ -153,6 +153,13 @@ $('#listLastInputsDelete').on('click', function(){
 	loadIncomesFromArrayToDiv();
 	loadExpencesFromArrayToDiv();
 });
+
+$('#deleteIncomeInLocalStorageButton').on('click', function(){
+	deleteIncomeInLocalStorage();
+});
+$('#deleteExpenceInLocalStorageButton').on('click', function(){
+	deleteExpenceInLocalStorage();
+});
 $('#escapeSetup').on('click', function(){
 	showMenu();
 });
@@ -996,7 +1003,7 @@ function loadIncomesFromArrayToDiv(){
 	var methodsString = "<fieldset id=\"deleteLastIncomesInLocalStorageFieldset\">";
 	for (var i=endOfArray; i>endOfArray-3; i--){
 		string=addIncomeData(i);
-		methodsString += "<div><input type=\"radio\" name=\"incomeDeleteLocalStorageInput\" value=\"Expence"+incomesObj[i].id + "\">"+ string +"</div>";
+		methodsString += "<div><input type=\"radio\" name=\"incomeDeleteLocalStorageInput\" value=\"Income"+incomesObj[i].id + "\">"+ string +"</div>";
 		if(i==0) break;
 	}
 	methodsString += "</fieldset>";
@@ -1009,9 +1016,21 @@ function loadExpencesFromArrayToDiv(){
 	var methodsString = "<fieldset id=\"deleteLastExpencesInLocalStorageFieldset\">";
 	for (var i=endOfArray; i>endOfArray-3; i--){
 		string=addExpenceData(i);
-		methodsString += "<div><input type=\"radio\" name=\"expenceDeleteLocalStorageInput\" value=\"Income"+expencesObj[i].id + "\">"+ string +"</div>";
+		methodsString += "<div><input type=\"radio\" name=\"expenceDeleteLocalStorageInput\" value=\"Expence"+expencesObj[i].id + "\">"+ string +"</div>";
 		if(i==0) break;
 	}
 	methodsString += "</fieldset>";
 	$('#lastExpencesLoaded').append(methodsString);
+}
+function deleteIncomeInLocalStorage(){
+	var incomeToDelete = $("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").val();
+	localStorage.removeItem(incomeToDelete);
+	$("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").parent().remove();
+	alert("Usunięto wskazany przychód");
+}
+function deleteExpenceInLocalStorage(){
+	var expenceToDelete = $("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").val();
+	localStorage.removeItem(expenceToDelete);
+	$("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").parent().remove();
+	alert("Usunięto wskazany wydatek");
 }
