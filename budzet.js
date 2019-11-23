@@ -94,6 +94,7 @@ $('#listLoginChange').on('click', function(){
 	
 	$('#expenceMenuSetup').css('display', 'none');
 	$('#incomeMenuSetup').css('display', 'none');
+	$('#lastInputsMenuSetup').css('display', 'none');
 });
 
 $('#changeLoginButton').on('click', function(){
@@ -109,6 +110,7 @@ $('#listExpenceChange').on('click', function(){
 	$('#loginSetup').css('display', 'none');
 	$('#expenceMenuSetup').css('display', 'block');
 	$('#incomeMenuSetup').css('display', 'none');
+	$('#lastInputsMenuSetup').css('display', 'none');
 	loadPaymentWaysToDiv();
 	loadCathegoriesToDiv();
 	adjustSetupHeight();
@@ -132,10 +134,24 @@ $('#listIncomeChange').on('click', function(){
 	$('#incomeMenuSetup').css('display', 'block');
 	$('.setupContainer').css({'height': '600px'});
 	$('#expenceMenuSetup').css({'height': '500px'});
+	$('#lastInputsMenuSetup').css('display', 'none');
 	loadIncomeCathegoriesToDiv();
 });
 $('#addIncomeCathegoryButton').on('click', function(){
 	addNewCathegoryOfIncome();
+});
+$('#deleteIncomeCathegoryButton').on('click', function(){
+	deleteCathegoryOfIncome();
+});
+$('#listLastInputsDelete').on('click', function(){
+	$('#loginSetup').css('display', 'none');	
+	$('#expenceMenuSetup').css('display', 'none');
+	$('#incomeMenuSetup').css('display', 'none');
+	$('.setupContainer').css({'height': '600px'});
+	$('#lastInputsMenuSetup').css({'height': '485px'});
+	$('#lastInputsMenuSetup').css('display', 'block');
+	loadIncomesFromArrayToDiv();
+	loadExpencesFromArrayToDiv();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -437,13 +453,13 @@ function showExpenceStorage(){
 function addExpenceData(i)
 {
 	var string = "";
-	string = string +" "+ expencesObj[i].id.toString();
-	string = string +" "+ expencesObj[i].userId.toString();
-	string = string +" "+ expencesObj[i].amount;
-	string = string +" "+ expencesObj[i].date;
-	string = string +" "+ expencesObj[i].payment;
-	string = string +" "+ expencesObj[i].source;
-	string = string +" "+ expencesObj[i].comment;
+	string = string +"<b>id wydatku: </b>"+ expencesObj[i].id.toString();
+	string = string +",<b> id użytkownika: </b>"+ expencesObj[i].userId.toString();
+	string = string +",<b> rozmiar wydatku: </b>"+ expencesObj[i].amount;
+	string = string +",<b>  data wydatku: </b>"+ expencesObj[i].date;
+	string = string +",<b>  metoda zapłaty: wydatku: </b>"+ expencesObj[i].payment;
+	string = string +",<b>  źródło wydatku: </b>"+ expencesObj[i].source;
+	string = string +",<b> komentarz: </b>"+ expencesObj[i].comment;
 	return string;
 }
 function showIncomesManager(){
@@ -583,12 +599,12 @@ function showIncomeStorage(){
 }
 function addIncomeData(i){
 	var string = "";
-	string = string +" "+ incomesObj[i].id.toString();
-	string = string +" "+ incomesObj[i].userId.toString();
-	string = string +" "+ incomesObj[i].amount;
-	string = string +" "+ incomesObj[i].date;
-	string = string +" "+ incomesObj[i].category;
-	string = string +" "+ incomesObj[i].comment;
+	string = string +"<b>id przychodu: </b>"+ incomesObj[i].id.toString();
+	string = string +",<b> id użytkownika: </b>"+ incomesObj[i].userId.toString();
+	string = string +",<b> rozmiar przychodu: </b>"+ incomesObj[i].amount;
+	string = string +",<b> data przychodu: </b>"+ incomesObj[i].date;
+	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].category;
+	string = string +",<b> komentarz: </b>"+ incomesObj[i].comment;
 	return string;
 }
 function showSetupManager(){
@@ -797,6 +813,7 @@ function loadPaymentWaysToDiv(){
 }
 function deleteMethodOfPayment(){
 	var wayOfPayment = $("input[type=radio][name=expenceDelete]:checked").val();
+	$('input[type=radio][name=expenceDelete]:checked').parent().remove();
 	wayOfPayment = deleteSpaces(wayOfPayment);
 	var element = document.getElementById(wayOfPayment);
     element.parentNode.removeChild(element);
@@ -863,7 +880,7 @@ function loadCathegoriesToDiv(){
 }
 function deleteCathegoryOfPayment(){
 	var cathegoryOfPayment = $("input[type=radio][name=expenceMethodDelete]:checked").val();
-	$('input[type=radio][name=expenceMethodDelete]:checked').remove();
+	$('input[type=radio][name=expenceMethodDelete]:checked').parent().remove();
 	cathegoryOfPayment = deleteSpaces(cathegoryOfPayment);
 	var element = document.getElementById(cathegoryOfPayment);
     element.parentNode.removeChild(element);
@@ -914,6 +931,7 @@ function loadIncomeCathegoriesToDiv(){
 		var string = "";
 		var quotMarks = false;
 		var methodsString = "<fieldset id=\"deleteIncomeCathegoryFieldset\">";
+		
 		for(var i=0; i<methods.length; i++){
 			
 			if(methods.charAt(i)==" " && quotMarks == false) 
@@ -938,13 +956,10 @@ function loadIncomeCathegoriesToDiv(){
 		}
 		methodsString += "</fieldset>";
 		$('#incomeCathegoryDelete').append(methodsString);
-		var positionButton = $('#incomeCathegoryDelete').css('height');
-		positionButton = (parseInt(positionButton) / 2) - 15;
-		var positionSting = positionButton.toString();
-		$('#deleteIncomeCathegoryButton').css({'margin-top': positionSting +'px'});
 }
 function addNewCathegoryOfIncome(){
 	var addedCathegory = $('#addIncomeCathegoryTextInput').val();
+	if(addedCathegory == "") {alert("Nie wprowadzono nowej kategorii!"); return;};
 	if(addedIncomeCathegory==0){
 	 $('#incomeCategory').append("<div class=\"kol\" id=\""+addedCathegory+"\"><input type='radio' value=\""+ addedCathegory +"\" name='incomeCategory' checked><label>"+ addedCathegory +"</label></div>");
 	 $('#paymentCathegoriesListDiv').append("<div style=\"clear:both;\"></div>");
@@ -958,4 +973,45 @@ function addNewCathegoryOfIncome(){
 	}
 	 alert("Dodano nową kategorię przychodu");
 	 $('#addIncomeCathegoryTextInput').val("");
+}
+function deleteCathegoryOfIncome(){
+	var cathegoryOfPayment = $("input[type=radio][name=incomeDeleteCathegoryInput]:checked").val();
+	$('input[type=radio][name=incomeDeleteCathegoryInput]:checked').parent().remove();
+	var marginTopOfButtons = $('#addIncomeButton').css('margin-top');
+	marginTopOfButtons = parseInt(marginTopOfButtons) + 25;
+	
+	$('#addIncomeButton').css({'margin-top': marginTopOfButtons.toString() +'px'});
+	$('#escapeIncomes').css({'margin-top': marginTopOfButtons.toString() +'px'});
+	$('#showIncomeStorage').css({'margin-top': marginTopOfButtons.toString() +'px'});
+	cathegoryOfPayment = deleteSpaces(cathegoryOfPayment);
+	var element = document.getElementById(cathegoryOfPayment);
+    element.parentNode.removeChild(element);
+	
+	alert("Usunięto wybraną kategorię płatności");
+}
+function loadIncomesFromArrayToDiv(){
+	$('#lastIncomesLoaded').html("");
+	var endOfArray = incomesObj.length-1;
+	var string = "";
+	var methodsString = "<fieldset id=\"deleteLastIncomesInLocalStorageFieldset\">";
+	for (var i=endOfArray; i>endOfArray-3; i--){
+		string=addIncomeData(i);
+		methodsString += "<div><input type=\"radio\" name=\"incomeDeleteLocalStorageInput\" value=\"Expence"+incomesObj[i].id + "\">"+ string +"</div>";
+		if(i==0) break;
+	}
+	methodsString += "</fieldset>";
+	$('#lastIncomesLoaded').append(methodsString);
+}
+function loadExpencesFromArrayToDiv(){
+	$('#lastExpencesLoaded').html("");
+	var endOfArray = expencesObj.length-1;
+	var string = "";
+	var methodsString = "<fieldset id=\"deleteLastExpencesInLocalStorageFieldset\">";
+	for (var i=endOfArray; i>endOfArray-3; i--){
+		string=addExpenceData(i);
+		methodsString += "<div><input type=\"radio\" name=\"expenceDeleteLocalStorageInput\" value=\"Income"+expencesObj[i].id + "\">"+ string +"</div>";
+		if(i==0) break;
+	}
+	methodsString += "</fieldset>";
+	$('#lastExpencesLoaded').append(methodsString);
 }

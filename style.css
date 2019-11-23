@@ -436,6 +436,15 @@ h4
 	border-radius:10px;
 	display:none;
 }
+#lastInputsMenuSetup
+{
+	width:500px;
+	height:485px;
+	background:#917f70;
+	float:left;
+	border-radius:10px;
+	display:none;
+}
 .inputTextExpenceChangeSite
 {
 	width: 150px;
@@ -476,4 +485,20 @@ h4
 	display:inline-block;
 	min-width:180px;
 	margin:0px 10px;
+}
+.changeButton3
+{
+	margin-left:193px;
+	height: 30px;
+	width: 115px;
+	outline: none;
+	float: left;
+}
+.changeButton3:hover
+{
+	cursor:pointer;
+	background-color:#f2923f;
+	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
+	-moz-box-shadow: 2px 2px 2px 2px #20206b;
+	box-shadow: 2px 2px 2px 1px #20206b;
 }

@@ -151,7 +151,7 @@
 				</div>
 			</div>
 			<div class="incomesContainer">
-				<div class="header">
+				<div class="header" style="margin-top:15px;">
 					<h2 style="color:white; text-align:center;">Strona umożliwiająca dodanie pojedynczego przychodu</h2>
 				</div>
 				<div class="inputList">
@@ -210,7 +210,7 @@
 							<div class="listPos" id="listIncomeChange">
 								Edytowanie menu przychodów
 							</div>
-							<div class="listPos">
+							<div class="listPos" id="listLastInputsDelete">
 								Usuwanie wybranych wpisów
 							</div>
 						</div>
@@ -272,6 +272,16 @@
 							<div id="incomeCathegoryDelete" > 
 							</div>
 							<input type="button" class="changeButton" id="deleteIncomeCathegoryButton" value="Usuń kategorię">
+						</div>
+						<div id="lastInputsMenuSetup">
+							<h4>Usuwanie ostatnio dodanych przychodów</h4>
+							<div id="lastIncomesLoaded">
+							</div>
+							<div><input type="button" class="changeButton3" id="deleteIncomeInLocalStorageButton" value="Usuń przychód"></div>
+							<div><h4 style="padding-top:25px;">Usuwanie ostatnio dodanych wydatków</h4></div>
+							<div id="lastExpencesLoaded">
+							</div>
+							<div><input type="button" class="changeButton3" id="deleteExpenceInLocalStorageButton" value="Usuń wydatek"></div>
 						</div>
 						<div class="functionInterface">
 								<input type="button" class="setupButton" id="escapeSetup" value="Powrót do menu głównego">
