@@ -15,8 +15,6 @@ $(document).ready(function(){
 	
 	loadUsersFromLocalStorage();
 });
-//localStorage.removeItem("Income1");
-//localStorage.removeItem("Income7");
 
 $('#register').on('click', function(){
 	signUpAUser();
@@ -62,6 +60,8 @@ $('#escape').on('click', function(){
 	loggedUserID = 0;
 	var endOfArrayExpences = expencesObj.length;
 	expencesObj.splice(0,endOfArrayExpences);
+	var endOfArrayIncomes = incomesObj.length;
+	incomesObj.splice(0,endOfArrayIncomes);
 	location.reload();
 	$("#name").val("");
 	$("#password").val("");
@@ -78,6 +78,8 @@ $('#showIncomeStorage').on('click', function(){
 
 $('#escapeIncomes').on('click', function(){
 	loggedUserID = 0;
+	var endOfArrayExpences = expencesObj.length;
+	expencesObj.splice(0,endOfArrayExpences);
 	var endOfArrayIncomes = incomesObj.length;
 	incomesObj.splice(0,endOfArrayIncomes);
 	location.reload();
