@@ -68,12 +68,12 @@ $('#escape').on('click', function(){
 	$("#email").val("");
 });
 
-$('#showStorage').on('click', function(){
-	showExpenceStorage();
+$('#backFromExpencesButton').on('click', function(){
+	showMenu();
 });
 
-$('#showIncomeStorage').on('click', function(){
-	showIncomeStorage();
+$('#backFromIncomesButton').on('click', function(){
+	showMenu();
 });
 
 $('#escapeIncomes').on('click', function(){
@@ -162,7 +162,13 @@ $('#deleteIncomeInLocalStorageButton').on('click', function(){
 $('#deleteExpenceInLocalStorageButton').on('click', function(){
 	deleteExpenceInLocalStorage();
 });
+$('#summary').on('click',function(){
+	showSummaryManager();
+});
 $('#escapeSetup').on('click', function(){
+	showMenu();
+});
+$('#escapeSummary').on('click', function(){
 	showMenu();
 });
 function loadUsersFromLocalStorage()
@@ -285,7 +291,6 @@ function singUserIn()
 		if(emailValue != usersObj[checkedID-1].email) {alert("Podano błędny adres email"); return;}
 		loggedUserID = checkedID;
 		alert("Zostałeś zalogowany!");
-		//sessionStorage.setItem("UserID", loggedUserID);
 		loadExpencesOfLoggedUser();
 		loadIncomesOfLoggedUser();
 		showMenu();
@@ -327,6 +332,10 @@ function showMenu(){
 	$('.register').css('display','none');
 	$('.menu').css('display', 'block');
 	$('.setupContainer').css('display', 'none');
+	$('.incomesContainer').css('display','none');
+	$('.expenceContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+	
 }
 
 function showExpenceManager(){
@@ -335,6 +344,17 @@ function showExpenceManager(){
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+}
+function showSummaryManager()
+{
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.summaryContainer').css('display','block');
+	$('.incomesContainer').css('display','none');
+	createTableOfExpences();
+	createTableOfIncomes();
 }
 function loadExpencesOfLoggedUser()
 {
@@ -386,7 +406,8 @@ function getExpenceDataFromStringWithDashes(valueOfName)
 				break;
 				case 2: 
 					string = changeCommasToDots(string);
-					ExpenceInArray.amount = parseFloat(string); string = ""; break;
+					var expenceValue = parseFloat(string);
+					ExpenceInArray.amount = Math.round(expenceValue*100)/100; string = ""; break;
 				case 3: ExpenceInArray.date = string; string = ""; break;
 				case 4: ExpenceInArray.payment = string; string = ""; break;
 				case 5: ExpenceInArray.source = string; string = ""; break;
@@ -477,6 +498,7 @@ function showIncomesManager(){
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','block');
+	$('.summaryContainer').css('display','none');
 }
 
 function addNewIncome(){
@@ -487,7 +509,7 @@ function addNewIncome(){
 		userId: 0,
 		amount: "",
 		date: "",
-		category: "",
+		cathegory: "",
 		comment: ""
 	};
 	var amount;
@@ -507,7 +529,7 @@ function addNewIncome(){
 	IncomeInArray.userId = loggedUserID;
 	IncomeInArray.amount = amount;
 	IncomeInArray.date = date;
-	IncomeInArray.category = category;
+	IncomeInArray.cathegory = category;
 	IncomeInArray.comment = comment;
 	incomesObj.push(IncomeInArray);
 	
@@ -545,7 +567,7 @@ function getIncomeDataFromStringWithDashes(valueOfName){
 		userId: 0,
 		amount: "",
 		date: "",
-		category: "",
+		cathegory: "",
 		comment: ""
 	};
 	for(var i=0; i<valueOfName.length; i++)
@@ -568,9 +590,10 @@ function getIncomeDataFromStringWithDashes(valueOfName){
 				break;
 				case 2: 
 					string = changeCommasToDots(string);
-					IncomeInArray.amount = parseFloat(string); string = ""; break;
+					var incomeValue = parseFloat(string);
+					IncomeInArray.amount = Math.round(incomeValue*100)/100; string = ""; break;
 				case 3: IncomeInArray.date = string; string = ""; break;
-				case 4: IncomeInArray.category = string; string = ""; break;
+				case 4: IncomeInArray.cathegory = string; string = ""; break;
 				case 5: IncomeInArray.comment = string; string = ""; break;
 			}
 			dashCounter++;
@@ -612,7 +635,7 @@ function addIncomeData(i){
 	string = string +",<b> id użytkownika: </b>"+ incomesObj[i].userId.toString();
 	string = string +",<b> rozmiar przychodu: </b>"+ incomesObj[i].amount;
 	string = string +",<b> data przychodu: </b>"+ incomesObj[i].date;
-	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].category;
+	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].cathegory;
 	string = string +",<b> komentarz: </b>"+ incomesObj[i].comment;
 	return string;
 }
@@ -622,6 +645,7 @@ function showSetupManager(){
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'block');
 	$('.incomesContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
 }
 
 function changeLoginOfLoggedUser(){
@@ -1028,11 +1052,169 @@ function deleteIncomeInLocalStorage(){
 	var incomeToDelete = $("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").val();
 	localStorage.removeItem(incomeToDelete);
 	$("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").parent().remove();
+	incomesObj.splice(0,expencesObj.length);
+	loadIncomesOfLoggedUser();
 	alert("Usunięto wskazany przychód");
 }
 function deleteExpenceInLocalStorage(){
 	var expenceToDelete = $("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").val();
 	localStorage.removeItem(expenceToDelete);
 	$("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").parent().remove();
+	expencesObj.splice(0,expencesObj.length);
+	loadExpencesOfLoggedUser();
 	alert("Usunięto wskazany wydatek");
 }
+
+function createTableOfExpences(){
+	$('#expenceTable').html("");
+	let table = document.getElementById("expenceTable");
+	let data = Object.keys(expencesObj[0]);
+	generateTable(table, expencesObj)
+	generateTableHead(table, data);
+}
+function generateTableHead(table, data){
+	let tHead = table.createTHead();
+	let row = tHead.insertRow();
+	for(let key of data){
+		if(key == "userId") continue;
+ 		let th = document.createElement("th");
+		let text = document.createTextNode(key);
+		th.appendChild(text);
+		row.appendChild(th);
+	}
+
+	
+}
+function generateTable(table, data) {
+     
+	var expencesSorted = [];
+	var sumOfExpences = 0;
+	var sumOfCathegoryAmount = 0;
+	expencesSorted = sortExpencesByCathegory(expencesSorted);
+	var cathegory = expencesSorted[0].source;
+	let lastElement = expencesSorted.length - 1;
+	for (let element of expencesSorted) {
+		let temporary = element.source;
+		if(cathegory != temporary){
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfExpences += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+        let row = table.insertRow();
+        for (var key in element) {
+			if(key == "userId") continue;
+			if(key == "amount") {sumOfCathegoryAmount+= parseFloat(element.amount);};
+          let cell = row.insertCell();
+          let text = document.createTextNode(element[key]);
+          cell.appendChild(text);
+        }
+		if(element == expencesSorted[lastElement])
+		{
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfExpences += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+      }
+		
+    }
+function addSummaryRow(table, cathegory, sumOfCathegoryAmount){
+		let rowCathegory = table.insertRow();
+		let cellCathegory = rowCathegory.insertCell();
+		let text = document.createTextNode(cathegory);
+		cellCathegory.appendChild(text);
+		let cellAmount = rowCathegory.insertCell();
+		Math.round(sumOfCathegoryAmount*100)/100;
+		let textSum = document.createTextNode(sumOfCathegoryAmount);
+		cellAmount.appendChild(textSum);
+		for(let k=0; k<4; k++){
+			rowCathegory.insertCell();
+		}
+	}
+function sortExpencesByCathegory(expencesSorted){
+		var cathegory="";
+		for(let i=0; i<expencesObj.length; i++){
+			cathegory = expencesObj[i].source;
+			if(checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted)) continue;
+			var temporary =[];
+			for(let k=0; k<expencesObj.length; k++){
+				if(cathegory==expencesObj[k].source){
+					temporary.push(expencesObj[k]);
+				}
+			}
+			temporary.sort(function(a,b){
+				return new Date(b.date) - new Date(a.date);
+				});
+			Array.prototype.push.apply(expencesSorted,temporary);
+			temporary.splice(0,temporary.length);
+		}
+		return expencesSorted;
+	}
+function checkIfCathegoryIsAlreadyIncluded(cathegory,sortedArray){
+		for (let i=0; i<sortedArray.length; i++){
+			if (cathegory == sortedArray[i].source) return true;
+		}
+		return false;
+	}
+	
+function createTableOfIncomes(){
+	$('#incomeTable').html("");
+	let table = document.getElementById("incomeTable");
+	let data = Object.keys(incomesObj[0]);
+	generateIncomesTable(table, incomesObj)
+	generateTableHead(table, data);
+}
+function generateIncomesTable(table, data) {
+     
+	var incomesSorted = [];
+	var sumOfIncomes = 0;
+	var sumOfCathegoryAmount = 0;
+	incomesSorted = sortIncomesByCathegory(incomesSorted);
+	var cathegory = incomesSorted[0].cathegory;
+	let lastElement = incomesSorted.length - 1;
+	for (let element of incomesSorted) {
+		let temporary = element.cathegory;
+		if(cathegory != temporary){
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfIncomes += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+        let row = table.insertRow();
+        for (var key in element) {
+			if(key == "userId") continue;
+			if(key == "amount") {sumOfCathegoryAmount+= parseFloat(element.amount);};
+          let cell = row.insertCell();
+          let text = document.createTextNode(element[key]);
+          cell.appendChild(text);
+        }
+		if(element == incomesSorted[lastElement])
+		{
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfIncomes += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+      }
+		
+    }
+function sortIncomesByCathegory(incomesSorted){
+		var cathegory="";
+		for(let i=0; i<incomesObj.length; i++){
+			cathegory = incomesObj[i].cathegory;
+			if(checkIfCathegoryIsAlreadyIncluded(cathegory,incomesSorted)) continue;
+			var temporary =[];
+			for(let k=0; k<incomesObj.length; k++){
+				if(cathegory==incomesObj[k].cathegory){
+					temporary.push(incomesObj[k]);
+				}
+			}
+			temporary.sort(function(a,b){
+				return new Date(b.date) - new Date(a.date);
+				});
+			Array.prototype.push.apply(incomesSorted,temporary);
+			temporary.splice(0,temporary.length);
+		}
+		return incomesSorted;
+	}

@@ -147,7 +147,7 @@
 					<input type="button" class="expencesButton" id="escape" value="Wyloguj się">
 				</div>
 				<div class="row">
-					<input type="button" class="expencesButton" id="showStorage" value="Pokaż wydatki">
+					<input type="button" class="expencesButton" id="backFromExpencesButton" value="Powrót do menu">
 				</div>
 			</div>
 			<div class="incomesContainer">
@@ -190,7 +190,7 @@
 						<input type="button" class="expencesButton" id="escapeIncomes" value="Wyloguj się">
 					</div>
 					<div class="row">
-						<input type="button" class="expencesButton" id="showIncomeStorage" value="Pokaż przychody">
+						<input type="button" class="expencesButton" id="backFromIncomesButton" value="Powrót do menu">
 					</div>
 					
 				</div>
@@ -271,7 +271,7 @@
 							</div>
 							<div id="incomeCathegoryDelete" > 
 							</div>
-							<input type="button" class="changeButton" id="deleteIncomeCathegoryButton" value="Usuń kategorię">
+							<input type="button" class="changeButton3" id="deleteIncomeCathegoryButton" value="Usuń kategorię">
 						</div>
 						<div id="lastInputsMenuSetup">
 							<h4>Usuwanie ostatnio dodanych przychodów</h4>
@@ -289,7 +289,16 @@
 						</div>
 					</div>
 			</div>
-			
+			<div class="summaryContainer">
+				<h4>Podsumowanie wydatków oraz przychodów za podany okres</h4>
+				<table id="expenceTable" class="summaryTable">
+				</table>
+				<table id="incomeTable" class="summaryTable">
+				</table>
+				<div class="functionInterface" >
+								<input type="button" class="setupButton" id="escapeSummary" value="Powrót do menu głównego">
+				</div>
+			</div>
 			
 		</div>
 	</div>
