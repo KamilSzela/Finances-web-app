@@ -291,12 +291,30 @@
 			</div>
 			<div class="summaryContainer">
 				<h4>Podsumowanie wydatków oraz przychodów za podany okres</h4>
+				<div id="choosePeriodDiv">
+					<label for="dateSpan" style="color:white; margin-left:10px;">Wybierz okres do obliczeń bilansu wydatków i przychodów</label>
+					
+					<select id="dateSpan">
+					
+						<option value="lastMonth" selected >Bieżący miesiąc</option>
+						<option value="previousMonth" >Poprzedni miesiąc</option>
+						<option value="lastYear">Bieżacy rok</option>
+						<option value="nonStandardSpan">Niestandardowy</option>
+					
+					</select>
+				</div>
+				<div id="nonStandardDateInput" class="rowSummary">
+					<div style="margin-left:10px;"><label>Data początkowa<input type="date" placeholder="Podaj datę początku okresu przeliczeń" id="beginnigTimeSpan" class="textInput2"></label></div>
+					<div style="margin-left:10px;"><label>Data końcowa<input type="date" placeholder="Podaj datę końca okresu przeliczeń" id="endingTimeSpan" class="textInput2"></label></div>
+					
+				</div>
+				<input type="button" class="summaryButton" id="generateSummaryButton" value="Generuj tabele z danego okresu">
 				<table id="expenceTable" class="summaryTable">
 				</table>
 				<table id="incomeTable" class="summaryTable">
 				</table>
 				<div class="functionInterface" >
-								<input type="button" class="setupButton" id="escapeSummary" value="Powrót do menu głównego">
+						<input type="button" class="summaryButton" id="escapeSummary" value="Powrót do menu głównego">
 				</div>
 			</div>
 			

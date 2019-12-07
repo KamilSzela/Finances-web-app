@@ -165,9 +165,40 @@ $('#deleteExpenceInLocalStorageButton').on('click', function(){
 $('#summary').on('click',function(){
 	showSummaryManager();
 });
+$('#dateSpan').on('change', function(){
+	var chosenSpan = $('#dateSpan').val();
+	$('#expenceTable').html("");
+	//$('#summaryContainer').css({
+				//'height': '600px'
+				//});
+	if(chosenSpan=='nonStandardSpan'){
+		$('#nonStandardDateInput').css({
+			'display':'block',
+			'color':'white'
+		});
+		
+		$('#escapeSummary').css('margin-top', '300px');
+	}
+	else{
+		$('#nonStandardDateInput').css({
+			'display':'none'
+		});
+		$('#escapeSummary').css({
+			'margin-top': '345px'
+			});
+		
+	}
+});
+
+$('#generateSummaryButton').on('click', function(){
+	var choice = $('#dateSpan').val();
+	createTableOfExpences(choice);
+	
+});
 $('#escapeSetup').on('click', function(){
 	showMenu();
 });
+
 $('#escapeSummary').on('click', function(){
 	showMenu();
 });
@@ -353,8 +384,6 @@ function showSummaryManager()
 	$('.menu').css('display', 'none');
 	$('.summaryContainer').css('display','block');
 	$('.incomesContainer').css('display','none');
-	createTableOfExpences();
-	createTableOfIncomes();
 }
 function loadExpencesOfLoggedUser()
 {
@@ -1065,32 +1094,36 @@ function deleteExpenceInLocalStorage(){
 	alert("Usunięto wskazany wydatek");
 }
 
-function createTableOfExpences(){
-	$('#expenceTable').html("");
-	let table = document.getElementById("expenceTable");
-	let data = Object.keys(expencesObj[0]);
-	generateTable(table, expencesObj)
-	generateTableHead(table, data);
-}
-function generateTableHead(table, data){
-	let tHead = table.createTHead();
-	let row = tHead.insertRow();
-	for(let key of data){
-		if(key == "userId") continue;
- 		let th = document.createElement("th");
-		let text = document.createTextNode(key);
-		th.appendChild(text);
-		row.appendChild(th);
+	function createTableOfExpences(timeSpan){
+		$('#expenceTable').html("");
+		let table = document.getElementById("expenceTable");
+		//Array.prototype.push.apply(expencesObj,addictionalExpences);
+		let data = Object.keys(expencesObj[0]);
+		generateTable(table, expencesObj, timeSpan);
+		generateTableHead(table, data);
+		adjustSummaryButtonPosition();
+	}
+	function generateTableHead(table, data){
+		let tHead = table.createTHead();
+		let row = tHead.insertRow();
+		for(let key of data){
+			if(key == "userId") continue;
+			let th = document.createElement("th");
+			let text = document.createTextNode(key);
+			th.appendChild(text);
+			row.appendChild(th);
 	}
 
 	
 }
-function generateTable(table, data) {
-     
+	function generateTable(table, data, timeSpan) {
+ 	  
 	var expencesSorted = [];
+	var expencesFromTimeSpan = [];
 	var sumOfExpences = 0;
 	var sumOfCathegoryAmount = 0;
-	expencesSorted = sortExpencesByCathegory(expencesSorted);
+	expencesFromTimeSpan = loadExpencesOfTimeSpan(timeSpan, expencesFromTimeSpan);
+	expencesSorted = sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan);
 	var cathegory = expencesSorted[0].source;
 	let lastElement = expencesSorted.length - 1;
 	for (let element of expencesSorted) {
@@ -1104,7 +1137,7 @@ function generateTable(table, data) {
         let row = table.insertRow();
         for (var key in element) {
 			if(key == "userId") continue;
-			if(key == "amount") {sumOfCathegoryAmount+= parseFloat(element.amount);};
+			if(key == "amount") {sumOfCathegoryAmount += parseFloat(element.amount);};
           let cell = row.insertCell();
           let text = document.createTextNode(element[key]);
           cell.appendChild(text);
@@ -1119,28 +1152,124 @@ function generateTable(table, data) {
       }
 		
     }
-function addSummaryRow(table, cathegory, sumOfCathegoryAmount){
+	function addSummaryRow(table, cathegory, sumOfCathegoryAmount){
 		let rowCathegory = table.insertRow();
 		let cellCathegory = rowCathegory.insertCell();
 		let text = document.createTextNode(cathegory);
 		cellCathegory.appendChild(text);
+		//rowCathegory.insertCell();
 		let cellAmount = rowCathegory.insertCell();
-		Math.round(sumOfCathegoryAmount*100)/100;
 		let textSum = document.createTextNode(sumOfCathegoryAmount);
 		cellAmount.appendChild(textSum);
-		for(let k=0; k<4; k++){
-			rowCathegory.insertCell();
+		
+	}
+	
+	function loadExpencesOfTimeSpan(timeSpan, expencesFromTimeSpan){
+		
+		var date = "";
+		if(timeSpan =="lastMonth"){
+			for(var i=0; i<expencesObj.length; i++){
+				date = expencesObj[i].date;
+				if(checkIfDateOfExpenceIsFromLastMonth(date)) {
+					expencesFromTimeSpan.push(expencesObj[i]);
+				}
+			}
+		}
+		else if (timeSpan == 'previousMonth'){
+			for(var i=0; i<expencesObj.length; i++){
+				date = expencesObj[i].date;
+				if(checkIfDateOfExpenceIsFromPreviosMonth(date)) {
+					expencesFromTimeSpan.push(expencesObj[i]);
+				}
+			}
+		}
+		
+		else if(timeSpan == 'lastYear'){
+			for(var i=0; i<expencesObj.length; i++){
+				date = expencesObj[i].date;
+				if(checkIfDateOfExpenceIsFromPreviosYear(date)) {
+					expencesFromTimeSpan.push(expencesObj[i]);
+				}
+			}
+		}
+		else{
+			var firstDate = $('#beginnigTimeSpan').val();
+			var secondDate = $('#endingTimeSpan').val();
+			if(checkIfDateOneIsOlder(secondDate, firstDate)){
+				alert("Podana data końca okresu jest starsza niz data początku okresu. Podaj prawidłową datę");
+				return;
+			}
+			for(var i=0; i<expencesObj.length; i++){
+				date = expencesObj[i].date;
+				if(checkIfDateOfExpenceIsFromTimeSpan(date)) {
+					expencesFromTimeSpan.push(expencesObj[i]);
+				}
+			}
+		}
+		return expencesFromTimeSpan;
+	}
+	
+	function checkIfDateOfExpenceIsFromLastMonth(date){
+		var todaysDate = new Date();
+		var d = new Date();
+		var day = d.getDate();
+		var month = d.getMonth()+1;
+		var year = d.getFullYear();
+		var expenceMonth = date.substr(5,2);
+		var expenceYear = date.substr(0,4);
+		if(expenceMonth == month && expenceYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfExpenceIsFromPreviosMonth(date){
+		//var todaysDate = new Date();
+		var d = new Date();
+		var day = d.getDate();
+		var month = d.getMonth();
+		var year = d.getFullYear();
+		if (month == 0){
+			month = 12;
+			year-=1;
+		}
+		var expenceMonth = date.substr(5,2);
+		var expenceYear = date.substr(0,4);
+		if(expenceMonth == month && expenceYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfExpenceIsFromPreviosYear(date){
+		var todaysDate = new Date();
+		var d = new Date();
+		var year = d.getFullYear();
+		var expenceYear = date.substr(0,4);
+		if(expenceYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfExpenceIsFromTimeSpan(date){
+		var firstDate = $('#beginnigTimeSpan').val();
+		var secondDate = $('#endingTimeSpan').val();
+		if(checkIfDateOneIsOlder(date, firstDate) == false && checkIfDateOneIsOlder(date, secondDate)==true) return true;
+		else return false;
+	}
+	function checkIfDateOneIsOlder(dateOne, dateTwo){
+		if(dateOne.substr(0,4) < dateTwo.substr(0,4)) return true;
+		else if(dateOne.substr(0,4) > dateTwo.substr(0,4)) return false;
+		else{
+			if(dateOne.substr(5,2) < dateTwo.substr(5,2)) return true;
+			else if(dateOne.substr(5,2) > dateTwo.substr(5,2)) return false;
+			else{
+				if(dateOne.substr(8,2) < dateTwo.substr(8,2)) return true;
+				else return false;
+			}
 		}
 	}
-function sortExpencesByCathegory(expencesSorted){
+	function sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan){
 		var cathegory="";
-		for(let i=0; i<expencesObj.length; i++){
-			cathegory = expencesObj[i].source;
+		for(let i=0; i<expencesFromTimeSpan.length; i++){
+			cathegory = expencesFromTimeSpan[i].source;
 			if(checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted)) continue;
 			var temporary =[];
-			for(let k=0; k<expencesObj.length; k++){
-				if(cathegory==expencesObj[k].source){
-					temporary.push(expencesObj[k]);
+			for(let k=0; k<expencesFromTimeSpan.length; k++){
+				if(cathegory==expencesFromTimeSpan[k].source){
+					temporary.push(expencesFromTimeSpan[k]);
 				}
 			}
 			temporary.sort(function(a,b){
@@ -1151,13 +1280,31 @@ function sortExpencesByCathegory(expencesSorted){
 		}
 		return expencesSorted;
 	}
-function checkIfCathegoryIsAlreadyIncluded(cathegory,sortedArray){
-		for (let i=0; i<sortedArray.length; i++){
-			if (cathegory == sortedArray[i].source) return true;
+	function checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted){
+		for (let i=0; i<expencesSorted.length; i++){
+			if (cathegory == expencesSorted[i].source) return true;
 		}
 		return false;
 	}
-	
+	function adjustSummaryButtonPosition(){
+		var tableHeight = parseInt($('#expenceTable').css('height'));
+		if(tableHeight < 420){
+			var buttonMargin = parseInt($('#escapeSummary').css('margin-top'));
+			buttonMargin -= tableHeight;
+			$('#escapeSummary').css({
+				'margin-top': buttonMargin.toString() + 'px'
+				});
+		}
+		else{
+			var extension = tableHeight - 415;
+			var containerHeight = 600 + extension;
+			var heightToSet = containerHeight.toString() + "px";
+			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
+			$('#escapeSummary').css({
+				'margin-top': '10px'
+				});	
+		}
+	}
 function createTableOfIncomes(){
 	$('#incomeTable').html("");
 	let table = document.getElementById("incomeTable");
