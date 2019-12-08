@@ -168,9 +168,10 @@ $('#summary').on('click',function(){
 $('#dateSpan').on('change', function(){
 	var chosenSpan = $('#dateSpan').val();
 	$('#expenceTable').html("");
-	//$('#summaryContainer').css({
-				//'height': '600px'
-				//});
+	$('#incomeTable').html("");
+	$('.summaryContainer').css({
+				'height': '600px'
+				});
 	if(chosenSpan=='nonStandardSpan'){
 		$('#nonStandardDateInput').css({
 			'display':'block',
@@ -193,7 +194,8 @@ $('#dateSpan').on('change', function(){
 $('#generateSummaryButton').on('click', function(){
 	var choice = $('#dateSpan').val();
 	createTableOfExpences(choice);
-	
+	createTableOfIncomes(choice);
+	adjustSummaryButtonPosition();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -1099,9 +1101,9 @@ function deleteExpenceInLocalStorage(){
 		let table = document.getElementById("expenceTable");
 		//Array.prototype.push.apply(expencesObj,addictionalExpences);
 		let data = Object.keys(expencesObj[0]);
-		generateTable(table, expencesObj, timeSpan);
+		generateExpenceTable(table, expencesObj, timeSpan);
 		generateTableHead(table, data);
-		adjustSummaryButtonPosition();
+		
 	}
 	function generateTableHead(table, data){
 		let tHead = table.createTHead();
@@ -1116,13 +1118,13 @@ function deleteExpenceInLocalStorage(){
 
 	
 }
-	function generateTable(table, data, timeSpan) {
+	function generateExpenceTable(table, data, timeSpan) {
  	  
 	var expencesSorted = [];
 	var expencesFromTimeSpan = [];
 	var sumOfExpences = 0;
 	var sumOfCathegoryAmount = 0;
-	expencesFromTimeSpan = loadExpencesOfTimeSpan(timeSpan, expencesFromTimeSpan);
+	expencesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, expencesFromTimeSpan, expencesObj);
 	expencesSorted = sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan);
 	var cathegory = expencesSorted[0].source;
 	let lastElement = expencesSorted.length - 1;
@@ -1164,31 +1166,31 @@ function deleteExpenceInLocalStorage(){
 		
 	}
 	
-	function loadExpencesOfTimeSpan(timeSpan, expencesFromTimeSpan){
+	function loadInputsOfTimeSpan(timeSpan, inputsFromTimeSpan, arrayWithInputs){
 		
 		var date = "";
 		if(timeSpan =="lastMonth"){
-			for(var i=0; i<expencesObj.length; i++){
-				date = expencesObj[i].date;
-				if(checkIfDateOfExpenceIsFromLastMonth(date)) {
-					expencesFromTimeSpan.push(expencesObj[i]);
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromLastMonth(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
 				}
 			}
 		}
 		else if (timeSpan == 'previousMonth'){
-			for(var i=0; i<expencesObj.length; i++){
-				date = expencesObj[i].date;
-				if(checkIfDateOfExpenceIsFromPreviosMonth(date)) {
-					expencesFromTimeSpan.push(expencesObj[i]);
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromPreviosMonth(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
 				}
 			}
 		}
 		
 		else if(timeSpan == 'lastYear'){
-			for(var i=0; i<expencesObj.length; i++){
-				date = expencesObj[i].date;
-				if(checkIfDateOfExpenceIsFromPreviosYear(date)) {
-					expencesFromTimeSpan.push(expencesObj[i]);
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromPreviosYear(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
 				}
 			}
 		}
@@ -1199,28 +1201,28 @@ function deleteExpenceInLocalStorage(){
 				alert("Podana data końca okresu jest starsza niz data początku okresu. Podaj prawidłową datę");
 				return;
 			}
-			for(var i=0; i<expencesObj.length; i++){
-				date = expencesObj[i].date;
-				if(checkIfDateOfExpenceIsFromTimeSpan(date)) {
-					expencesFromTimeSpan.push(expencesObj[i]);
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromTimeSpan(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
 				}
 			}
 		}
-		return expencesFromTimeSpan;
+		return inputsFromTimeSpan;
 	}
 	
-	function checkIfDateOfExpenceIsFromLastMonth(date){
+	function checkIfDateOfInputIsFromLastMonth(date){
 		var todaysDate = new Date();
 		var d = new Date();
 		var day = d.getDate();
 		var month = d.getMonth()+1;
 		var year = d.getFullYear();
-		var expenceMonth = date.substr(5,2);
-		var expenceYear = date.substr(0,4);
-		if(expenceMonth == month && expenceYear == year) return true;
+		var inputMonth = date.substr(5,2);
+		var inputYear = date.substr(0,4);
+		if(inputMonth == month && inputYear == year) return true;
 		else return false;
 	}
-	function checkIfDateOfExpenceIsFromPreviosMonth(date){
+	function checkIfDateOfInputIsFromPreviosMonth(date){
 		//var todaysDate = new Date();
 		var d = new Date();
 		var day = d.getDate();
@@ -1230,20 +1232,20 @@ function deleteExpenceInLocalStorage(){
 			month = 12;
 			year-=1;
 		}
-		var expenceMonth = date.substr(5,2);
-		var expenceYear = date.substr(0,4);
-		if(expenceMonth == month && expenceYear == year) return true;
+		var inputMonth = date.substr(5,2);
+		var inputYear = date.substr(0,4);
+		if(inputMonth == month && inputYear == year) return true;
 		else return false;
 	}
-	function checkIfDateOfExpenceIsFromPreviosYear(date){
+	function checkIfDateOfInputIsFromPreviosYear(date){
 		var todaysDate = new Date();
 		var d = new Date();
 		var year = d.getFullYear();
-		var expenceYear = date.substr(0,4);
-		if(expenceYear == year) return true;
+		var inputYear = date.substr(0,4);
+		if(inputYear == year) return true;
 		else return false;
 	}
-	function checkIfDateOfExpenceIsFromTimeSpan(date){
+	function checkIfDateOfInputIsFromTimeSpan(date){
 		var firstDate = $('#beginnigTimeSpan').val();
 		var secondDate = $('#endingTimeSpan').val();
 		if(checkIfDateOneIsOlder(date, firstDate) == false && checkIfDateOneIsOlder(date, secondDate)==true) return true;
@@ -1266,7 +1268,7 @@ function deleteExpenceInLocalStorage(){
 		for(let i=0; i<expencesFromTimeSpan.length; i++){
 			cathegory = expencesFromTimeSpan[i].source;
 			if(checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted)) continue;
-			var temporary =[];
+			var temporary = [];
 			for(let k=0; k<expencesFromTimeSpan.length; k++){
 				if(cathegory==expencesFromTimeSpan[k].source){
 					temporary.push(expencesFromTimeSpan[k]);
@@ -1280,23 +1282,25 @@ function deleteExpenceInLocalStorage(){
 		}
 		return expencesSorted;
 	}
-	function checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted){
-		for (let i=0; i<expencesSorted.length; i++){
-			if (cathegory == expencesSorted[i].source) return true;
+	function checkIfCathegoryIsAlreadyIncluded(cathegory,inputsSorted){
+		for (let i=0; i<inputsSorted.length; i++){
+			if (cathegory == inputsSorted[i].source || cathegory == inputsSorted.cathegory) return true;
 		}
 		return false;
 	}
 	function adjustSummaryButtonPosition(){
-		var tableHeight = parseInt($('#expenceTable').css('height'));
-		if(tableHeight < 420){
+		var tableExpencesHeight = parseInt($('#expenceTable').css('height'));
+		var tableIncomesHeight = parseInt($('#incomeTable').css('height'));
+		var sumHeight = tableExpencesHeight + tableIncomesHeight + 20;
+		if(sumHeight < 420){
 			var buttonMargin = parseInt($('#escapeSummary').css('margin-top'));
-			buttonMargin -= tableHeight;
+			buttonMargin -= sumHeight;
 			$('#escapeSummary').css({
 				'margin-top': buttonMargin.toString() + 'px'
 				});
 		}
 		else{
-			var extension = tableHeight - 415;
+			var extension = sumHeight - 415;
 			var containerHeight = 600 + extension;
 			var heightToSet = containerHeight.toString() + "px";
 			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
@@ -1305,19 +1309,21 @@ function deleteExpenceInLocalStorage(){
 				});	
 		}
 	}
-function createTableOfIncomes(){
+function createTableOfIncomes(timeSpan){
 	$('#incomeTable').html("");
 	let table = document.getElementById("incomeTable");
 	let data = Object.keys(incomesObj[0]);
-	generateIncomesTable(table, incomesObj)
+	generateIncomesTable(table, incomesObj, timeSpan)
 	generateTableHead(table, data);
 }
-function generateIncomesTable(table, data) {
+function generateIncomesTable(table, data, timeSpan) {
      
 	var incomesSorted = [];
+	var incomesFromTimeSpan = [];
 	var sumOfIncomes = 0;
 	var sumOfCathegoryAmount = 0;
-	incomesSorted = sortIncomesByCathegory(incomesSorted);
+	incomesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, incomesFromTimeSpan, incomesObj);
+	incomesSorted = sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan);
 	var cathegory = incomesSorted[0].cathegory;
 	let lastElement = incomesSorted.length - 1;
 	for (let element of incomesSorted) {
@@ -1344,17 +1350,17 @@ function generateIncomesTable(table, data) {
 			sumOfCathegoryAmount = 0;
 		}
       }
-		
+					    
     }
-function sortIncomesByCathegory(incomesSorted){
+function sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan){
 		var cathegory="";
-		for(let i=0; i<incomesObj.length; i++){
-			cathegory = incomesObj[i].cathegory;
+		for(let i=0; i<incomesFromTimeSpan.length; i++){
+			cathegory = incomesFromTimeSpan[i].cathegory;
 			if(checkIfCathegoryIsAlreadyIncluded(cathegory,incomesSorted)) continue;
 			var temporary =[];
-			for(let k=0; k<incomesObj.length; k++){
-				if(cathegory==incomesObj[k].cathegory){
-					temporary.push(incomesObj[k]);
+			for(let k=0; k<incomesFromTimeSpan.length; k++){
+				if(cathegory==incomesFromTimeSpan[k].cathegory){
+					temporary.push(incomesFromTimeSpan[k]);
 				}
 			}
 			temporary.sort(function(a,b){
@@ -1364,4 +1370,5 @@ function sortIncomesByCathegory(incomesSorted){
 			temporary.splice(0,temporary.length);
 		}
 		return incomesSorted;
+		
 	}
