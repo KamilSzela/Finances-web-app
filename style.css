@@ -561,7 +561,7 @@ h4
 .summaryButton
 {
 	margin-left:215px;
-	margin-top:345px;
+	margin-top:385px;
 	height:45px;
 	width:270px;
 	background-color:blue;
@@ -576,4 +576,8 @@ h4
 {
 	display:none;
 	margin-bottom:10px;
+}
+.chartContainer
+{
+	height:0px;
 }

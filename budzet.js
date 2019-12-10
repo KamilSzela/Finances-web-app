@@ -169,6 +169,10 @@ $('#dateSpan').on('change', function(){
 	var chosenSpan = $('#dateSpan').val();
 	$('#expenceTable').html("");
 	$('#incomeTable').html("");
+	$('#chartExpencesContainer').html("");
+	$('#chartIncomesContainer').html("");
+	$('#chartIncomesContainer').css('height', '0px');
+	$('#chartExpencesContainer').css('height', '0px');
 	$('.summaryContainer').css({
 				'height': '600px'
 				});
@@ -178,14 +182,15 @@ $('#dateSpan').on('change', function(){
 			'color':'white'
 		});
 		
-		$('#escapeSummary').css('margin-top', '300px');
+		$('#escapeSummary').css('margin-top', '340px');
 	}
 	else{
 		$('#nonStandardDateInput').css({
 			'display':'none'
 		});
+		
 		$('#escapeSummary').css({
-			'margin-top': '345px'
+			'margin-top': '385px'
 			});
 		
 	}
@@ -1101,8 +1106,7 @@ function deleteExpenceInLocalStorage(){
 		let table = document.getElementById("expenceTable");
 		//Array.prototype.push.apply(expencesObj,addictionalExpences);
 		let data = Object.keys(expencesObj[0]);
-		generateExpenceTable(table, expencesObj, timeSpan);
-		generateTableHead(table, data);
+		generateExpenceTable(table, data, timeSpan);
 		
 	}
 	function generateTableHead(table, data){
@@ -1122,19 +1126,36 @@ function deleteExpenceInLocalStorage(){
  	  
 	var expencesSorted = [];
 	var expencesFromTimeSpan = [];
+	var dataPoints = [];
 	var sumOfExpences = 0;
 	var sumOfCathegoryAmount = 0;
+	
 	expencesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, expencesFromTimeSpan, expencesObj);
 	expencesSorted = sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan);
+	if(expencesSorted.length == 0) {
+		$('#expenceTable').html("<div class=\"row\">Brak wydatków w rozpatrywanym okresie</div>");
+		$('#chartExpencesContainer').css('heigth', '0px');
+		return;
+	}
 	var cathegory = expencesSorted[0].source;
 	let lastElement = expencesSorted.length - 1;
 	for (let element of expencesSorted) {
 		let temporary = element.source;
 		if(cathegory != temporary){
-			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
-			cathegory = temporary;
-			sumOfExpences += sumOfCathegoryAmount;
-			sumOfCathegoryAmount = 0;
+			if(cathegory != temporary){
+				let oneDataToChart = {
+					y: 0,
+					label: ""
+				};
+				oneDataToChart.y = sumOfCathegoryAmount;
+				oneDataToChart.label = cathegory;
+				dataPoints.push(oneDataToChart);
+			
+				addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+				cathegory = temporary;
+				sumOfExpences += sumOfCathegoryAmount;
+				sumOfCathegoryAmount = 0;
+			}
 		}
         let row = table.insertRow();
         for (var key in element) {
@@ -1144,14 +1165,42 @@ function deleteExpenceInLocalStorage(){
           let text = document.createTextNode(element[key]);
           cell.appendChild(text);
         }
-		if(element == expencesSorted[lastElement])
-		{
-			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
-			cathegory = temporary;
-			sumOfExpences += sumOfCathegoryAmount;
-			sumOfCathegoryAmount = 0;
+		if(element == expencesSorted[lastElement]){
+			
+				let oneDataToChart = {
+					y: 0,
+					label: ""
+				};
+				oneDataToChart.y = sumOfCathegoryAmount;
+				oneDataToChart.label = cathegory;
+				dataPoints.push(oneDataToChart);
+			
+				addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+				cathegory = temporary;
+				sumOfExpences += sumOfCathegoryAmount;
+				sumOfCathegoryAmount = 0;
+			
 		}
-      }
+	}
+	  for(var k=0; k<dataPoints.length; k++){
+		  dataPoints[k].y = dataPoints[k].y/sumOfExpences * 100;
+	  }
+		var chart = new CanvasJS.Chart("chartExpencesContainer", {
+			animationEnabled: true,
+			title: {
+				text: "Wydatki według kategorii"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##0.00\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints
+			}]
+		});
+		chart.render();
+		$('#chartExpencesContainer').css('height', '400px');
+		generateTableHead(table, data);
 		
     }
 	function addSummaryRow(table, cathegory, sumOfCathegoryAmount){
@@ -1291,7 +1340,8 @@ function deleteExpenceInLocalStorage(){
 	function adjustSummaryButtonPosition(){
 		var tableExpencesHeight = parseInt($('#expenceTable').css('height'));
 		var tableIncomesHeight = parseInt($('#incomeTable').css('height'));
-		var sumHeight = tableExpencesHeight + tableIncomesHeight + 20;
+		var chartsHeight = parseInt($('#chartIncomesContainer').css('height')) + parseInt($('#chartExpencesContainer').css('height'));
+		var sumHeight = tableExpencesHeight + tableIncomesHeight + chartsHeight;
 		if(sumHeight < 420){
 			var buttonMargin = parseInt($('#escapeSummary').css('margin-top'));
 			buttonMargin -= sumHeight;
@@ -1300,8 +1350,8 @@ function deleteExpenceInLocalStorage(){
 				});
 		}
 		else{
-			var extension = sumHeight - 415;
-			var containerHeight = 600 + extension;
+			var extension = tableExpencesHeight + tableIncomesHeight - 400;
+			var containerHeight = 600 + extension + chartsHeight;
 			var heightToSet = containerHeight.toString() + "px";
 			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
 			$('#escapeSummary').css({
@@ -1313,22 +1363,37 @@ function createTableOfIncomes(timeSpan){
 	$('#incomeTable').html("");
 	let table = document.getElementById("incomeTable");
 	let data = Object.keys(incomesObj[0]);
-	generateIncomesTable(table, incomesObj, timeSpan)
-	generateTableHead(table, data);
+	generateIncomesTable(table, data, timeSpan);
+	
 }
 function generateIncomesTable(table, data, timeSpan) {
      
 	var incomesSorted = [];
 	var incomesFromTimeSpan = [];
+	var dataPoints = [];
 	var sumOfIncomes = 0;
 	var sumOfCathegoryAmount = 0;
 	incomesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, incomesFromTimeSpan, incomesObj);
 	incomesSorted = sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan);
+	
+	if(incomesSorted.length == 0) {
+		$('#incomeTable').html("<div class=\"row\">Brak przychodów w rozpatrywanym okresie</div>");
+		$('#chartIncomesContainer').css('heigth', '0px');
+		return;
+	}
 	var cathegory = incomesSorted[0].cathegory;
 	let lastElement = incomesSorted.length - 1;
 	for (let element of incomesSorted) {
 		let temporary = element.cathegory;
 		if(cathegory != temporary){
+			let oneDataToChart = {
+				y: 0,
+				label: ""
+			};
+			oneDataToChart.y = sumOfCathegoryAmount;
+			oneDataToChart.label = cathegory;
+			dataPoints.push(oneDataToChart);
+			
 			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
 			cathegory = temporary;
 			sumOfIncomes += sumOfCathegoryAmount;
@@ -1344,13 +1409,40 @@ function generateIncomesTable(table, data, timeSpan) {
         }
 		if(element == incomesSorted[lastElement])
 		{
+			let oneDataToChart = {
+				y: 0,
+				label: ""
+			};
+			oneDataToChart.y = sumOfCathegoryAmount;
+			oneDataToChart.label = cathegory;
+			dataPoints.push(oneDataToChart);
+			
 			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
 			cathegory = temporary;
 			sumOfIncomes += sumOfCathegoryAmount;
 			sumOfCathegoryAmount = 0;
 		}
       }
-					    
+	  
+	  for(var k=0; k<dataPoints.length; k++){
+		  dataPoints[k].y = dataPoints[k].y/sumOfIncomes * 100;
+	  }
+		var chart = new CanvasJS.Chart("chartIncomesContainer", {
+			animationEnabled: true,
+			title: {
+				text: "Przychody według kategorii"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##0.00\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints
+			}]
+		});
+		chart.render();
+	    $('#chartIncomesContainer').css('height', '400px');
+		generateTableHead(table, data);			    
     }
 function sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan){
 		var cathegory="";

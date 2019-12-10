@@ -311,8 +311,13 @@
 				<input type="button" class="summaryButton" id="generateSummaryButton" value="Generuj tabele z danego okresu">
 				<table id="expenceTable" class="summaryTable">
 				</table>
-				<table id="incomeTable" class="summaryTable">
+				<div id="chartExpencesContainer" class="chartContainer">
+				</div>
+				<table id="incomeTable" class="summaryTable" class="chartContainer">
 				</table>
+				<div id="chartIncomesContainer" class="chartContainer">
+				</div>
+				
 				<div class="functionInterface" >
 						<input type="button" class="summaryButton" id="escapeSummary" value="Powrót do menu głównego">
 				</div>
@@ -321,6 +326,7 @@
 		</div>
 	</div>
 	<script src="jquery-3.4.1.min.js"></script>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	<script type="text/javascript" src="budzet.js"></script>
 </body>
 <html>
