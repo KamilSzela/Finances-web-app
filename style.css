@@ -436,6 +436,10 @@ h4
 	border-radius:10px;
 	display:none;
 }
+#dateIncome
+{
+	margin-left:103px;
+}
 #lastInputsMenuSetup
 {
 	width:500px;
@@ -580,4 +584,12 @@ h4
 .chartContainer
 {
 	height:0px;
+}
+.sumUpDiv
+{
+	height:0px;
+	font-size: 20px;
+	margin-top: 10px;
+	text-align: center;
+	color:white;
 }

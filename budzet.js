@@ -10,6 +10,8 @@ var lastIncomeID = 0;
 var addedExpenceMethod = 0;
 var addedExpenceCathegory = 0;
 var addedIncomeCathegory = 0;
+var sumOfIncomes = 0;
+var sumOfExpences = 0;
 
 $(document).ready(function(){
 	
@@ -166,34 +168,7 @@ $('#summary').on('click',function(){
 	showSummaryManager();
 });
 $('#dateSpan').on('change', function(){
-	var chosenSpan = $('#dateSpan').val();
-	$('#expenceTable').html("");
-	$('#incomeTable').html("");
-	$('#chartExpencesContainer').html("");
-	$('#chartIncomesContainer').html("");
-	$('#chartIncomesContainer').css('height', '0px');
-	$('#chartExpencesContainer').css('height', '0px');
-	$('.summaryContainer').css({
-				'height': '600px'
-				});
-	if(chosenSpan=='nonStandardSpan'){
-		$('#nonStandardDateInput').css({
-			'display':'block',
-			'color':'white'
-		});
-		
-		$('#escapeSummary').css('margin-top', '340px');
-	}
-	else{
-		$('#nonStandardDateInput').css({
-			'display':'none'
-		});
-		
-		$('#escapeSummary').css({
-			'margin-top': '385px'
-			});
-		
-	}
+	prepareSummaryBoard();
 });
 
 $('#generateSummaryButton').on('click', function(){
@@ -201,6 +176,7 @@ $('#generateSummaryButton').on('click', function(){
 	createTableOfExpences(choice);
 	createTableOfIncomes(choice);
 	adjustSummaryButtonPosition();
+	evaluateFinanceManagement();
 });
 $('#escapeSetup').on('click', function(){
 	showMenu();
@@ -209,6 +185,7 @@ $('#escapeSetup').on('click', function(){
 $('#escapeSummary').on('click', function(){
 	showMenu();
 });
+
 function loadUsersFromLocalStorage()
 {
 	if(localStorage.length>=1){
@@ -1088,7 +1065,7 @@ function deleteIncomeInLocalStorage(){
 	var incomeToDelete = $("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").val();
 	localStorage.removeItem(incomeToDelete);
 	$("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").parent().remove();
-	incomesObj.splice(0,expencesObj.length);
+	incomesObj.splice(0,incomesObj.length);
 	loadIncomesOfLoggedUser();
 	alert("Usunięto wskazany przychód");
 }
@@ -1127,13 +1104,14 @@ function deleteExpenceInLocalStorage(){
 	var expencesSorted = [];
 	var expencesFromTimeSpan = [];
 	var dataPoints = [];
-	var sumOfExpences = 0;
+	
 	var sumOfCathegoryAmount = 0;
 	
 	expencesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, expencesFromTimeSpan, expencesObj);
 	expencesSorted = sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan);
 	if(expencesSorted.length == 0) {
 		$('#expenceTable').html("<div class=\"row\">Brak wydatków w rozpatrywanym okresie</div>");
+		$('#expenceTable').css({'margin-left':'auto', 'margin-right': 'auto'});
 		$('#chartExpencesContainer').css('heigth', '0px');
 		return;
 	}
@@ -1333,7 +1311,7 @@ function deleteExpenceInLocalStorage(){
 	}
 	function checkIfCathegoryIsAlreadyIncluded(cathegory,inputsSorted){
 		for (let i=0; i<inputsSorted.length; i++){
-			if (cathegory == inputsSorted[i].source || cathegory == inputsSorted.cathegory) return true;
+			if (cathegory == inputsSorted[i].source || cathegory == inputsSorted[i].cathegory) return true;
 		}
 		return false;
 	}
@@ -1351,13 +1329,14 @@ function deleteExpenceInLocalStorage(){
 		}
 		else{
 			var extension = tableExpencesHeight + tableIncomesHeight - 400;
-			var containerHeight = 600 + extension + chartsHeight;
+			var containerHeight = 640 + extension + chartsHeight;
 			var heightToSet = containerHeight.toString() + "px";
 			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
 			$('#escapeSummary').css({
 				'margin-top': '10px'
 				});	
 		}
+		
 	}
 function createTableOfIncomes(timeSpan){
 	$('#incomeTable').html("");
@@ -1371,7 +1350,6 @@ function generateIncomesTable(table, data, timeSpan) {
 	var incomesSorted = [];
 	var incomesFromTimeSpan = [];
 	var dataPoints = [];
-	var sumOfIncomes = 0;
 	var sumOfCathegoryAmount = 0;
 	incomesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, incomesFromTimeSpan, incomesObj);
 	incomesSorted = sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan);
@@ -1464,3 +1442,51 @@ function sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan){
 		return incomesSorted;
 		
 	}
+function prepareSummaryBoard() {
+	var chosenSpan = $('#dateSpan').val();
+	sumOfIncomes = 0;
+	sumOfExpences = 0;
+	$('#expenceTable').html("");
+	$('#incomeTable').html("");
+	$('#chartExpencesContainer').html("");
+	$('#chartIncomesContainer').html("");
+	$('#chartIncomesContainer').css('height', '0px');
+	$('#chartExpencesContainer').css('height', '0px');
+	$('.sumUpDiv').html("");
+	$('.sumUpDiv').css({'height': '0px'});
+	$('.summaryContainer').css({
+				'height': '600px'
+				});
+	if(chosenSpan=='nonStandardSpan'){
+		$('#nonStandardDateInput').css({
+			'display':'block',
+			'color':'white'
+		});
+		
+		$('#escapeSummary').css('margin-top', '340px');
+	}
+	else{
+		$('#nonStandardDateInput').css({
+			'display':'none'
+		});
+		
+		$('#escapeSummary').css({
+			'margin-top': '385px'
+			});
+	}
+}
+function evaluateFinanceManagement(){
+	var sumOfMoney = sumOfIncomes - sumOfExpences;
+	$('.sumUpDiv').css({'height': '30px'});
+	var sumDivContent = $('.sumUpDiv').html();
+	if(sumOfMoney >= 0){
+		sumDivContent = "Gratulacje! Świetnie sobie radzisz z zarządzaniem swoimi pieniędzmi";
+		background = 'radial-gradient(#126110 10%,#2b8c29 50%,#529e51 80%)';
+	}
+	else{
+		sumDivContent = "Niestety! Suma twoich wydatków przekroczyła sumę przychodów";
+		background = 'radial-gradient(#941e16 10%,#a8342c 50%,#bf524b 80%)';
+	}
+	$('.sumUpDiv').html(sumDivContent);
+	$('.sumUpDiv').css({'background': background});
+}
