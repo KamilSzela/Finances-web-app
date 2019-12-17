@@ -27,12 +27,7 @@ $('#register').on('click', function(){
 });
 
 $('#signIn').on('click', function(){
-	//showUsersStorage();
 	singUserIn();
-});
-
-$('#escapeLink').on('click', function(){
-	loggedUserID = 0;
 });
 
 $('#expences').on('click',function(){
@@ -58,7 +53,7 @@ $('#addIncomeButton').on('click',function(){
 	addNewIncome();
 });
 
-$('#escape').on('click', function(){
+$('#logOutDiv').on('click', function(){
 	loggedUserID = 0;
 	var endOfArrayExpences = expencesObj.length;
 	expencesObj.splice(0,endOfArrayExpences);
@@ -78,22 +73,11 @@ $('#backFromIncomesButton').on('click', function(){
 	showMenu();
 });
 
-$('#escapeIncomes').on('click', function(){
-	loggedUserID = 0;
-	var endOfArrayExpences = expencesObj.length;
-	expencesObj.splice(0,endOfArrayExpences);
-	var endOfArrayIncomes = incomesObj.length;
-	incomesObj.splice(0,endOfArrayIncomes);
-	location.reload();
-	$("#name").val("");
-	$("#password").val("");
-	$("#email").val("");
-});
-
 $('#listLoginChange').on('click', function(){
 	$('#loginSetup').css('display', 'block');
 	
 	$('.setupContainer').css({'height': '600px'});
+	$('.setupFunction').css({'height': '542px'});
 	$('#expenceMenuSetup').css({'height': '500px'});
 	
 	$('#expenceMenuSetup').css('display', 'none');
@@ -137,6 +121,7 @@ $('#listIncomeChange').on('click', function(){
 	$('#expenceMenuSetup').css('display', 'none');
 	$('#incomeMenuSetup').css('display', 'block');
 	$('.setupContainer').css({'height': '600px'});
+	$('.setupFunction').css({'height': '542px'});
 	$('#expenceMenuSetup').css({'height': '500px'});
 	$('#lastInputsMenuSetup').css('display', 'none');
 	loadIncomeCathegoriesToDiv();
@@ -156,6 +141,7 @@ $('#listLastInputsDelete').on('click', function(){
 	$('#lastInputsMenuSetup').css('display', 'block');
 	loadIncomesFromArrayToDiv();
 	loadExpencesFromArrayToDiv();
+	adjustButtonPositionToDeletingLastInputs();
 });
 
 $('#deleteIncomeInLocalStorageButton').on('click', function(){
@@ -322,29 +308,11 @@ function checkLogin(loginValue)
 	}
 	return false;
 }
-function showUsersStorage(){
-	$('.register').css('display','none');
-	$('.menu').css('display', 'block');
-	var usersData = "";
-	
-	for(var i=0; i<usersObj.length; i++){
-		usersData = usersData + addData(i) + "</br>";
-	}
 
-	$('.menu').html(usersData);
-}
-function addData(i)
-{
-	var string = "";
-	string = string +" "+ usersObj[i].id.toString();
-	string = string +" "+ usersObj[i].login;
-	string = string +" "+ usersObj[i].email;
-	string = string +" "+ usersObj[i].password;
-	return string;
-}
 
 function showMenu(){
 	$('.register').css('display','none');
+	$('#logOutDiv').css('display','block');
 	$('.menu').css('display', 'block');
 	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','none');
@@ -352,12 +320,27 @@ function showMenu(){
 	$('.summaryContainer').css('display','none');
 	
 }
-
 function showExpenceManager(){
 	$('.expenceContainer').css('display','block');
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'none');
+	$('.incomesContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+}
+function showIncomesManager(){
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'none');
+	$('.incomesContainer').css('display','block');
+	$('.summaryContainer').css('display','none');
+}
+function showSetupManager(){
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'block');
 	$('.incomesContainer').css('display','none');
 	$('.summaryContainer').css('display','none');
 }
@@ -368,6 +351,7 @@ function showSummaryManager()
 	$('.menu').css('display', 'none');
 	$('.summaryContainer').css('display','block');
 	$('.incomesContainer').css('display','none');
+	$('.setupContainer').css('display', 'none');
 }
 function loadExpencesOfLoggedUser()
 {
@@ -482,22 +466,10 @@ function addNewExpence()
 	$('#commentExpence').val("");
 	
 }
-function showExpenceStorage(){
-	var expenceData = "";
-	
-	for(var i=0; i<expencesObj.length; i++){
-		expenceData = expenceData + addExpenceData(i) + "</br>";
-	}
-	
-	if(expenceData == "") $('.expenceContainer').html("niestety expencesObj jest puste");
-	
-	$('.expenceContainer').html(expenceData);
-}
 function addExpenceData(i)
 {
 	var string = "";
 	string = string +"<b>id wydatku: </b>"+ expencesObj[i].id.toString();
-	string = string +",<b> id użytkownika: </b>"+ expencesObj[i].userId.toString();
 	string = string +",<b> rozmiar wydatku: </b>"+ expencesObj[i].amount;
 	string = string +",<b>  data wydatku: </b>"+ expencesObj[i].date;
 	string = string +",<b>  metoda zapłaty: wydatku: </b>"+ expencesObj[i].payment;
@@ -505,15 +477,6 @@ function addExpenceData(i)
 	string = string +",<b> komentarz: </b>"+ expencesObj[i].comment;
 	return string;
 }
-function showIncomesManager(){
-	$('.expenceContainer').css('display','none');
-	$('.register').css('display','none');
-	$('.menu').css('display', 'none');
-	$('.setupContainer').css('display', 'none');
-	$('.incomesContainer').css('display','block');
-	$('.summaryContainer').css('display','none');
-}
-
 function addNewIncome(){
 	
 	lastIncomeID++;
@@ -630,37 +593,15 @@ function changeCommasToDots(string){
 	}
 	return newString;
 }
-
-function showIncomeStorage(){
-	var incomeData = "";
-	
-	for(var i=0; i<incomesObj.length; i++){
-		incomeData = incomeData + addIncomeData(i) + "</br>";
-	}
-	
-	if(incomeData == "") $('.incomesContainer').html("niestety incomesObj jest puste");
-	
-	$('.incomesContainer').html(incomeData);
-}
 function addIncomeData(i){
 	var string = "";
 	string = string +"<b>id przychodu: </b>"+ incomesObj[i].id.toString();
-	string = string +",<b> id użytkownika: </b>"+ incomesObj[i].userId.toString();
 	string = string +",<b> rozmiar przychodu: </b>"+ incomesObj[i].amount;
 	string = string +",<b> data przychodu: </b>"+ incomesObj[i].date;
 	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].cathegory;
 	string = string +",<b> komentarz: </b>"+ incomesObj[i].comment;
 	return string;
 }
-function showSetupManager(){
-	$('.expenceContainer').css('display','none');
-	$('.register').css('display','none');
-	$('.menu').css('display', 'none');
-	$('.setupContainer').css('display', 'block');
-	$('.incomesContainer').css('display','none');
-	$('.summaryContainer').css('display','none');
-}
-
 function changeLoginOfLoggedUser(){
 	if($('#loginChange').val()=="") {alert("Nie podałeś loginu do zmiany"); return;}
 	for(var i=0; i<localStorage.length; i++){
@@ -913,16 +854,6 @@ function loadCathegoriesToDiv(){
 			}
 		}
 		methodsString += "</fieldset>";
-		//$('#expenceMethodDelete').append(methodsString);
-		//var addHeight = $('#expenceCathegoryDelete').css('height');
-		//addHeight = parseInt(addHeight) + 600;
-		//var positionSting = addHeight.toString();
-		//$('.setupContainer').css({'height': positionSting +'px'});
-		
-		//var positionButton = $('#expenceMethodDelete').css('height');
-		//positionButton = (parseInt(positionButton) / 2) - 15;
-		//var positionSting = positionButton.toString();
-		//$('#deleteMethodButton').css({'margin-top': positionSting +'px'});
 }
 function deleteCathegoryOfPayment(){
 	var cathegoryOfPayment = $("input[type=radio][name=expenceMethodDelete]:checked").val();
@@ -1077,11 +1008,25 @@ function deleteExpenceInLocalStorage(){
 	loadExpencesOfLoggedUser();
 	alert("Usunięto wskazany wydatek");
 }
+function adjustButtonPositionToDeletingLastInputs(){
+	var incomesHeight = $('#lastIncomesLoaded').css('height');
+	var expencesHeight = $('#lastExpencesLoaded').css('height');
+	var heightOfHeaders = 132;
+	var buttonsHeigth = 30;
+	var totalHeight = parseInt(incomesHeight) + parseInt(expencesHeight) + heightOfHeaders + buttonsHeigth;
+	if(totalHeight>=485){
+		var difference = totalHeight - 485;
+		var inputsConteinerHeight = parseInt($('#lastInputsMenuSetup').css('height')) + difference;
+		var containerHeight = parseInt($('.setupContainer').css('height')) + difference;
 
+		$('#lastInputsMenuSetup').css({'height': inputsConteinerHeight.toString() +'px'});
+		$('.setupFunction').css({'height': inputsConteinerHeight.toString() +'px'});
+		$('.setupContainer').css({'height': containerHeight.toString() +'px'});
+	}
+}
 	function createTableOfExpences(timeSpan){
 		$('#expenceTable').html("");
 		let table = document.getElementById("expenceTable");
-		//Array.prototype.push.apply(expencesObj,addictionalExpences);
 		let data = Object.keys(expencesObj[0]);
 		generateExpenceTable(table, data, timeSpan);
 		
@@ -1186,7 +1131,6 @@ function deleteExpenceInLocalStorage(){
 		let cellCathegory = rowCathegory.insertCell();
 		let text = document.createTextNode(cathegory);
 		cellCathegory.appendChild(text);
-		//rowCathegory.insertCell();
 		let cellAmount = rowCathegory.insertCell();
 		let textSum = document.createTextNode(sumOfCathegoryAmount);
 		cellAmount.appendChild(textSum);
@@ -1239,9 +1183,7 @@ function deleteExpenceInLocalStorage(){
 	}
 	
 	function checkIfDateOfInputIsFromLastMonth(date){
-		var todaysDate = new Date();
 		var d = new Date();
-		var day = d.getDate();
 		var month = d.getMonth()+1;
 		var year = d.getFullYear();
 		var inputMonth = date.substr(5,2);
@@ -1250,9 +1192,7 @@ function deleteExpenceInLocalStorage(){
 		else return false;
 	}
 	function checkIfDateOfInputIsFromPreviosMonth(date){
-		//var todaysDate = new Date();
 		var d = new Date();
-		var day = d.getDate();
 		var month = d.getMonth();
 		var year = d.getFullYear();
 		if (month == 0){
@@ -1265,7 +1205,6 @@ function deleteExpenceInLocalStorage(){
 		else return false;
 	}
 	function checkIfDateOfInputIsFromPreviosYear(date){
-		var todaysDate = new Date();
 		var d = new Date();
 		var year = d.getFullYear();
 		var inputYear = date.substr(0,4);
@@ -1329,7 +1268,7 @@ function deleteExpenceInLocalStorage(){
 		}
 		else{
 			var extension = tableExpencesHeight + tableIncomesHeight - 400;
-			var containerHeight = 640 + extension + chartsHeight;
+			var containerHeight = 660 + extension + chartsHeight;
 			var heightToSet = containerHeight.toString() + "px";
 			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
 			$('#escapeSummary').css({
@@ -1343,7 +1282,6 @@ function createTableOfIncomes(timeSpan){
 	let table = document.getElementById("incomeTable");
 	let data = Object.keys(incomesObj[0]);
 	generateIncomesTable(table, data, timeSpan);
-	
 }
 function generateIncomesTable(table, data, timeSpan) {
      
