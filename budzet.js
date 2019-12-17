@@ -10,6 +10,8 @@ var lastIncomeID = 0;
 var addedExpenceMethod = 0;
 var addedExpenceCathegory = 0;
 var addedIncomeCathegory = 0;
+var sumOfIncomes = 0;
+var sumOfExpences = 0;
 
 $(document).ready(function(){
 	
@@ -25,12 +27,7 @@ $('#register').on('click', function(){
 });
 
 $('#signIn').on('click', function(){
-	//showUsersStorage();
 	singUserIn();
-});
-
-$('#escapeLink').on('click', function(){
-	loggedUserID = 0;
 });
 
 $('#expences').on('click',function(){
@@ -56,7 +53,7 @@ $('#addIncomeButton').on('click',function(){
 	addNewIncome();
 });
 
-$('#escape').on('click', function(){
+$('#logOutDiv').on('click', function(){
 	loggedUserID = 0;
 	var endOfArrayExpences = expencesObj.length;
 	expencesObj.splice(0,endOfArrayExpences);
@@ -68,30 +65,19 @@ $('#escape').on('click', function(){
 	$("#email").val("");
 });
 
-$('#showStorage').on('click', function(){
-	showExpenceStorage();
+$('#backFromExpencesButton').on('click', function(){
+	showMenu();
 });
 
-$('#showIncomeStorage').on('click', function(){
-	showIncomeStorage();
-});
-
-$('#escapeIncomes').on('click', function(){
-	loggedUserID = 0;
-	var endOfArrayExpences = expencesObj.length;
-	expencesObj.splice(0,endOfArrayExpences);
-	var endOfArrayIncomes = incomesObj.length;
-	incomesObj.splice(0,endOfArrayIncomes);
-	location.reload();
-	$("#name").val("");
-	$("#password").val("");
-	$("#email").val("");
+$('#backFromIncomesButton').on('click', function(){
+	showMenu();
 });
 
 $('#listLoginChange').on('click', function(){
 	$('#loginSetup').css('display', 'block');
 	
 	$('.setupContainer').css({'height': '600px'});
+	$('.setupFunction').css({'height': '542px'});
 	$('#expenceMenuSetup').css({'height': '500px'});
 	
 	$('#expenceMenuSetup').css('display', 'none');
@@ -135,6 +121,7 @@ $('#listIncomeChange').on('click', function(){
 	$('#expenceMenuSetup').css('display', 'none');
 	$('#incomeMenuSetup').css('display', 'block');
 	$('.setupContainer').css({'height': '600px'});
+	$('.setupFunction').css({'height': '542px'});
 	$('#expenceMenuSetup').css({'height': '500px'});
 	$('#lastInputsMenuSetup').css('display', 'none');
 	loadIncomeCathegoriesToDiv();
@@ -154,6 +141,7 @@ $('#listLastInputsDelete').on('click', function(){
 	$('#lastInputsMenuSetup').css('display', 'block');
 	loadIncomesFromArrayToDiv();
 	loadExpencesFromArrayToDiv();
+	adjustButtonPositionToDeletingLastInputs();
 });
 
 $('#deleteIncomeInLocalStorageButton').on('click', function(){
@@ -162,9 +150,28 @@ $('#deleteIncomeInLocalStorageButton').on('click', function(){
 $('#deleteExpenceInLocalStorageButton').on('click', function(){
 	deleteExpenceInLocalStorage();
 });
+$('#summary').on('click',function(){
+	showSummaryManager();
+});
+$('#dateSpan').on('change', function(){
+	prepareSummaryBoard();
+});
+
+$('#generateSummaryButton').on('click', function(){
+	var choice = $('#dateSpan').val();
+	createTableOfExpences(choice);
+	createTableOfIncomes(choice);
+	adjustSummaryButtonPosition();
+	evaluateFinanceManagement();
+});
 $('#escapeSetup').on('click', function(){
 	showMenu();
 });
+
+$('#escapeSummary').on('click', function(){
+	showMenu();
+});
+
 function loadUsersFromLocalStorage()
 {
 	if(localStorage.length>=1){
@@ -285,7 +292,6 @@ function singUserIn()
 		if(emailValue != usersObj[checkedID-1].email) {alert("Podano błędny adres email"); return;}
 		loggedUserID = checkedID;
 		alert("Zostałeś zalogowany!");
-		//sessionStorage.setItem("UserID", loggedUserID);
 		loadExpencesOfLoggedUser();
 		loadIncomesOfLoggedUser();
 		showMenu();
@@ -302,39 +308,50 @@ function checkLogin(loginValue)
 	}
 	return false;
 }
-function showUsersStorage(){
-	$('.register').css('display','none');
-	$('.menu').css('display', 'block');
-	var usersData = "";
-	
-	for(var i=0; i<usersObj.length; i++){
-		usersData = usersData + addData(i) + "</br>";
-	}
 
-	$('.menu').html(usersData);
-}
-function addData(i)
-{
-	var string = "";
-	string = string +" "+ usersObj[i].id.toString();
-	string = string +" "+ usersObj[i].login;
-	string = string +" "+ usersObj[i].email;
-	string = string +" "+ usersObj[i].password;
-	return string;
-}
 
 function showMenu(){
 	$('.register').css('display','none');
+	$('#logOutDiv').css('display','block');
 	$('.menu').css('display', 'block');
 	$('.setupContainer').css('display', 'none');
+	$('.incomesContainer').css('display','none');
+	$('.expenceContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+	
 }
-
 function showExpenceManager(){
 	$('.expenceContainer').css('display','block');
 	$('.register').css('display','none');
 	$('.menu').css('display', 'none');
 	$('.setupContainer').css('display', 'none');
 	$('.incomesContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+}
+function showIncomesManager(){
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'none');
+	$('.incomesContainer').css('display','block');
+	$('.summaryContainer').css('display','none');
+}
+function showSetupManager(){
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.setupContainer').css('display', 'block');
+	$('.incomesContainer').css('display','none');
+	$('.summaryContainer').css('display','none');
+}
+function showSummaryManager()
+{
+	$('.expenceContainer').css('display','none');
+	$('.register').css('display','none');
+	$('.menu').css('display', 'none');
+	$('.summaryContainer').css('display','block');
+	$('.incomesContainer').css('display','none');
+	$('.setupContainer').css('display', 'none');
 }
 function loadExpencesOfLoggedUser()
 {
@@ -386,7 +403,8 @@ function getExpenceDataFromStringWithDashes(valueOfName)
 				break;
 				case 2: 
 					string = changeCommasToDots(string);
-					ExpenceInArray.amount = parseFloat(string); string = ""; break;
+					var expenceValue = parseFloat(string);
+					ExpenceInArray.amount = Math.round(expenceValue*100)/100; string = ""; break;
 				case 3: ExpenceInArray.date = string; string = ""; break;
 				case 4: ExpenceInArray.payment = string; string = ""; break;
 				case 5: ExpenceInArray.source = string; string = ""; break;
@@ -448,22 +466,10 @@ function addNewExpence()
 	$('#commentExpence').val("");
 	
 }
-function showExpenceStorage(){
-	var expenceData = "";
-	
-	for(var i=0; i<expencesObj.length; i++){
-		expenceData = expenceData + addExpenceData(i) + "</br>";
-	}
-	
-	if(expenceData == "") $('.expenceContainer').html("niestety expencesObj jest puste");
-	
-	$('.expenceContainer').html(expenceData);
-}
 function addExpenceData(i)
 {
 	var string = "";
 	string = string +"<b>id wydatku: </b>"+ expencesObj[i].id.toString();
-	string = string +",<b> id użytkownika: </b>"+ expencesObj[i].userId.toString();
 	string = string +",<b> rozmiar wydatku: </b>"+ expencesObj[i].amount;
 	string = string +",<b>  data wydatku: </b>"+ expencesObj[i].date;
 	string = string +",<b>  metoda zapłaty: wydatku: </b>"+ expencesObj[i].payment;
@@ -471,14 +477,6 @@ function addExpenceData(i)
 	string = string +",<b> komentarz: </b>"+ expencesObj[i].comment;
 	return string;
 }
-function showIncomesManager(){
-	$('.expenceContainer').css('display','none');
-	$('.register').css('display','none');
-	$('.menu').css('display', 'none');
-	$('.setupContainer').css('display', 'none');
-	$('.incomesContainer').css('display','block');
-}
-
 function addNewIncome(){
 	
 	lastIncomeID++;
@@ -487,7 +485,7 @@ function addNewIncome(){
 		userId: 0,
 		amount: "",
 		date: "",
-		category: "",
+		cathegory: "",
 		comment: ""
 	};
 	var amount;
@@ -507,7 +505,7 @@ function addNewIncome(){
 	IncomeInArray.userId = loggedUserID;
 	IncomeInArray.amount = amount;
 	IncomeInArray.date = date;
-	IncomeInArray.category = category;
+	IncomeInArray.cathegory = category;
 	IncomeInArray.comment = comment;
 	incomesObj.push(IncomeInArray);
 	
@@ -545,7 +543,7 @@ function getIncomeDataFromStringWithDashes(valueOfName){
 		userId: 0,
 		amount: "",
 		date: "",
-		category: "",
+		cathegory: "",
 		comment: ""
 	};
 	for(var i=0; i<valueOfName.length; i++)
@@ -568,9 +566,10 @@ function getIncomeDataFromStringWithDashes(valueOfName){
 				break;
 				case 2: 
 					string = changeCommasToDots(string);
-					IncomeInArray.amount = parseFloat(string); string = ""; break;
+					var incomeValue = parseFloat(string);
+					IncomeInArray.amount = Math.round(incomeValue*100)/100; string = ""; break;
 				case 3: IncomeInArray.date = string; string = ""; break;
-				case 4: IncomeInArray.category = string; string = ""; break;
+				case 4: IncomeInArray.cathegory = string; string = ""; break;
 				case 5: IncomeInArray.comment = string; string = ""; break;
 			}
 			dashCounter++;
@@ -594,36 +593,15 @@ function changeCommasToDots(string){
 	}
 	return newString;
 }
-
-function showIncomeStorage(){
-	var incomeData = "";
-	
-	for(var i=0; i<incomesObj.length; i++){
-		incomeData = incomeData + addIncomeData(i) + "</br>";
-	}
-	
-	if(incomeData == "") $('.incomesContainer').html("niestety incomesObj jest puste");
-	
-	$('.incomesContainer').html(incomeData);
-}
 function addIncomeData(i){
 	var string = "";
 	string = string +"<b>id przychodu: </b>"+ incomesObj[i].id.toString();
-	string = string +",<b> id użytkownika: </b>"+ incomesObj[i].userId.toString();
 	string = string +",<b> rozmiar przychodu: </b>"+ incomesObj[i].amount;
 	string = string +",<b> data przychodu: </b>"+ incomesObj[i].date;
-	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].category;
+	string = string +",<b> kategoria przychodu: </b>"+ incomesObj[i].cathegory;
 	string = string +",<b> komentarz: </b>"+ incomesObj[i].comment;
 	return string;
 }
-function showSetupManager(){
-	$('.expenceContainer').css('display','none');
-	$('.register').css('display','none');
-	$('.menu').css('display', 'none');
-	$('.setupContainer').css('display', 'block');
-	$('.incomesContainer').css('display','none');
-}
-
 function changeLoginOfLoggedUser(){
 	if($('#loginChange').val()=="") {alert("Nie podałeś loginu do zmiany"); return;}
 	for(var i=0; i<localStorage.length; i++){
@@ -876,16 +854,6 @@ function loadCathegoriesToDiv(){
 			}
 		}
 		methodsString += "</fieldset>";
-		//$('#expenceMethodDelete').append(methodsString);
-		//var addHeight = $('#expenceCathegoryDelete').css('height');
-		//addHeight = parseInt(addHeight) + 600;
-		//var positionSting = addHeight.toString();
-		//$('.setupContainer').css({'height': positionSting +'px'});
-		
-		//var positionButton = $('#expenceMethodDelete').css('height');
-		//positionButton = (parseInt(positionButton) / 2) - 15;
-		//var positionSting = positionButton.toString();
-		//$('#deleteMethodButton').css({'margin-top': positionSting +'px'});
 }
 function deleteCathegoryOfPayment(){
 	var cathegoryOfPayment = $("input[type=radio][name=expenceMethodDelete]:checked").val();
@@ -1028,11 +996,435 @@ function deleteIncomeInLocalStorage(){
 	var incomeToDelete = $("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").val();
 	localStorage.removeItem(incomeToDelete);
 	$("input[type=radio][name=incomeDeleteLocalStorageInput]:checked").parent().remove();
+	incomesObj.splice(0,incomesObj.length);
+	loadIncomesOfLoggedUser();
 	alert("Usunięto wskazany przychód");
 }
 function deleteExpenceInLocalStorage(){
 	var expenceToDelete = $("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").val();
 	localStorage.removeItem(expenceToDelete);
 	$("input[type=radio][name=expenceDeleteLocalStorageInput]:checked").parent().remove();
+	expencesObj.splice(0,expencesObj.length);
+	loadExpencesOfLoggedUser();
 	alert("Usunięto wskazany wydatek");
+}
+function adjustButtonPositionToDeletingLastInputs(){
+	var incomesHeight = $('#lastIncomesLoaded').css('height');
+	var expencesHeight = $('#lastExpencesLoaded').css('height');
+	var heightOfHeaders = 132;
+	var buttonsHeigth = 30;
+	var totalHeight = parseInt(incomesHeight) + parseInt(expencesHeight) + heightOfHeaders + buttonsHeigth;
+	if(totalHeight>=485){
+		var difference = totalHeight - 485;
+		var inputsConteinerHeight = parseInt($('#lastInputsMenuSetup').css('height')) + difference;
+		var containerHeight = parseInt($('.setupContainer').css('height')) + difference;
+
+		$('#lastInputsMenuSetup').css({'height': inputsConteinerHeight.toString() +'px'});
+		$('.setupFunction').css({'height': inputsConteinerHeight.toString() +'px'});
+		$('.setupContainer').css({'height': containerHeight.toString() +'px'});
+	}
+}
+	function createTableOfExpences(timeSpan){
+		$('#expenceTable').html("");
+		let table = document.getElementById("expenceTable");
+		let data = Object.keys(expencesObj[0]);
+		generateExpenceTable(table, data, timeSpan);
+		
+	}
+	function generateTableHead(table, data){
+		let tHead = table.createTHead();
+		let row = tHead.insertRow();
+		for(let key of data){
+			if(key == "userId") continue;
+			let th = document.createElement("th");
+			let text = document.createTextNode(key);
+			th.appendChild(text);
+			row.appendChild(th);
+	}
+
+	
+}
+	function generateExpenceTable(table, data, timeSpan) {
+ 	  
+	var expencesSorted = [];
+	var expencesFromTimeSpan = [];
+	var dataPoints = [];
+	
+	var sumOfCathegoryAmount = 0;
+	
+	expencesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, expencesFromTimeSpan, expencesObj);
+	expencesSorted = sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan);
+	if(expencesSorted.length == 0) {
+		$('#expenceTable').html("<div class=\"row\">Brak wydatków w rozpatrywanym okresie</div>");
+		$('#expenceTable').css({'margin-left':'auto', 'margin-right': 'auto'});
+		$('#chartExpencesContainer').css('heigth', '0px');
+		return;
+	}
+	var cathegory = expencesSorted[0].source;
+	let lastElement = expencesSorted.length - 1;
+	for (let element of expencesSorted) {
+		let temporary = element.source;
+		if(cathegory != temporary){
+			if(cathegory != temporary){
+				let oneDataToChart = {
+					y: 0,
+					label: ""
+				};
+				oneDataToChart.y = sumOfCathegoryAmount;
+				oneDataToChart.label = cathegory;
+				dataPoints.push(oneDataToChart);
+			
+				addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+				cathegory = temporary;
+				sumOfExpences += sumOfCathegoryAmount;
+				sumOfCathegoryAmount = 0;
+			}
+		}
+        let row = table.insertRow();
+        for (var key in element) {
+			if(key == "userId") continue;
+			if(key == "amount") {sumOfCathegoryAmount += parseFloat(element.amount);};
+          let cell = row.insertCell();
+          let text = document.createTextNode(element[key]);
+          cell.appendChild(text);
+        }
+		if(element == expencesSorted[lastElement]){
+			
+				let oneDataToChart = {
+					y: 0,
+					label: ""
+				};
+				oneDataToChart.y = sumOfCathegoryAmount;
+				oneDataToChart.label = cathegory;
+				dataPoints.push(oneDataToChart);
+			
+				addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+				cathegory = temporary;
+				sumOfExpences += sumOfCathegoryAmount;
+				sumOfCathegoryAmount = 0;
+			
+		}
+	}
+	  for(var k=0; k<dataPoints.length; k++){
+		  dataPoints[k].y = dataPoints[k].y/sumOfExpences * 100;
+	  }
+		var chart = new CanvasJS.Chart("chartExpencesContainer", {
+			animationEnabled: true,
+			title: {
+				text: "Wydatki według kategorii"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##0.00\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints
+			}]
+		});
+		chart.render();
+		$('#chartExpencesContainer').css('height', '400px');
+		generateTableHead(table, data);
+		
+    }
+	function addSummaryRow(table, cathegory, sumOfCathegoryAmount){
+		let rowCathegory = table.insertRow();
+		let cellCathegory = rowCathegory.insertCell();
+		let text = document.createTextNode(cathegory);
+		cellCathegory.appendChild(text);
+		let cellAmount = rowCathegory.insertCell();
+		let textSum = document.createTextNode(sumOfCathegoryAmount);
+		cellAmount.appendChild(textSum);
+		
+	}
+	
+	function loadInputsOfTimeSpan(timeSpan, inputsFromTimeSpan, arrayWithInputs){
+		
+		var date = "";
+		if(timeSpan =="lastMonth"){
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromLastMonth(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
+				}
+			}
+		}
+		else if (timeSpan == 'previousMonth'){
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromPreviosMonth(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
+				}
+			}
+		}
+		
+		else if(timeSpan == 'lastYear'){
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromPreviosYear(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
+				}
+			}
+		}
+		else{
+			var firstDate = $('#beginnigTimeSpan').val();
+			var secondDate = $('#endingTimeSpan').val();
+			if(checkIfDateOneIsOlder(secondDate, firstDate)){
+				alert("Podana data końca okresu jest starsza niz data początku okresu. Podaj prawidłową datę");
+				return;
+			}
+			for(var i=0; i<arrayWithInputs.length; i++){
+				date = arrayWithInputs[i].date;
+				if(checkIfDateOfInputIsFromTimeSpan(date)) {
+					inputsFromTimeSpan.push(arrayWithInputs[i]);
+				}
+			}
+		}
+		return inputsFromTimeSpan;
+	}
+	
+	function checkIfDateOfInputIsFromLastMonth(date){
+		var d = new Date();
+		var month = d.getMonth()+1;
+		var year = d.getFullYear();
+		var inputMonth = date.substr(5,2);
+		var inputYear = date.substr(0,4);
+		if(inputMonth == month && inputYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfInputIsFromPreviosMonth(date){
+		var d = new Date();
+		var month = d.getMonth();
+		var year = d.getFullYear();
+		if (month == 0){
+			month = 12;
+			year-=1;
+		}
+		var inputMonth = date.substr(5,2);
+		var inputYear = date.substr(0,4);
+		if(inputMonth == month && inputYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfInputIsFromPreviosYear(date){
+		var d = new Date();
+		var year = d.getFullYear();
+		var inputYear = date.substr(0,4);
+		if(inputYear == year) return true;
+		else return false;
+	}
+	function checkIfDateOfInputIsFromTimeSpan(date){
+		var firstDate = $('#beginnigTimeSpan').val();
+		var secondDate = $('#endingTimeSpan').val();
+		if(checkIfDateOneIsOlder(date, firstDate) == false && checkIfDateOneIsOlder(date, secondDate)==true) return true;
+		else return false;
+	}
+	function checkIfDateOneIsOlder(dateOne, dateTwo){
+		if(dateOne.substr(0,4) < dateTwo.substr(0,4)) return true;
+		else if(dateOne.substr(0,4) > dateTwo.substr(0,4)) return false;
+		else{
+			if(dateOne.substr(5,2) < dateTwo.substr(5,2)) return true;
+			else if(dateOne.substr(5,2) > dateTwo.substr(5,2)) return false;
+			else{
+				if(dateOne.substr(8,2) < dateTwo.substr(8,2)) return true;
+				else return false;
+			}
+		}
+	}
+	function sortExpencesByCathegory(expencesSorted, expencesFromTimeSpan){
+		var cathegory="";
+		for(let i=0; i<expencesFromTimeSpan.length; i++){
+			cathegory = expencesFromTimeSpan[i].source;
+			if(checkIfCathegoryIsAlreadyIncluded(cathegory,expencesSorted)) continue;
+			var temporary = [];
+			for(let k=0; k<expencesFromTimeSpan.length; k++){
+				if(cathegory==expencesFromTimeSpan[k].source){
+					temporary.push(expencesFromTimeSpan[k]);
+				}
+			}
+			temporary.sort(function(a,b){
+				return new Date(b.date) - new Date(a.date);
+				});
+			Array.prototype.push.apply(expencesSorted,temporary);
+			temporary.splice(0,temporary.length);
+		}
+		return expencesSorted;
+	}
+	function checkIfCathegoryIsAlreadyIncluded(cathegory,inputsSorted){
+		for (let i=0; i<inputsSorted.length; i++){
+			if (cathegory == inputsSorted[i].source || cathegory == inputsSorted[i].cathegory) return true;
+		}
+		return false;
+	}
+	function adjustSummaryButtonPosition(){
+		var tableExpencesHeight = parseInt($('#expenceTable').css('height'));
+		var tableIncomesHeight = parseInt($('#incomeTable').css('height'));
+		var chartsHeight = parseInt($('#chartIncomesContainer').css('height')) + parseInt($('#chartExpencesContainer').css('height'));
+		var sumHeight = tableExpencesHeight + tableIncomesHeight + chartsHeight;
+		if(sumHeight < 420){
+			var buttonMargin = parseInt($('#escapeSummary').css('margin-top'));
+			buttonMargin -= sumHeight;
+			$('#escapeSummary').css({
+				'margin-top': buttonMargin.toString() + 'px'
+				});
+		}
+		else{
+			var extension = tableExpencesHeight + tableIncomesHeight - 400;
+			var containerHeight = 660 + extension + chartsHeight;
+			var heightToSet = containerHeight.toString() + "px";
+			$('.summaryContainer').css({'height': containerHeight.toString() +'px'});
+			$('#escapeSummary').css({
+				'margin-top': '10px'
+				});	
+		}
+		
+	}
+function createTableOfIncomes(timeSpan){
+	$('#incomeTable').html("");
+	let table = document.getElementById("incomeTable");
+	let data = Object.keys(incomesObj[0]);
+	generateIncomesTable(table, data, timeSpan);
+}
+function generateIncomesTable(table, data, timeSpan) {
+     
+	var incomesSorted = [];
+	var incomesFromTimeSpan = [];
+	var dataPoints = [];
+	var sumOfCathegoryAmount = 0;
+	incomesFromTimeSpan = loadInputsOfTimeSpan(timeSpan, incomesFromTimeSpan, incomesObj);
+	incomesSorted = sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan);
+	
+	if(incomesSorted.length == 0) {
+		$('#incomeTable').html("<div class=\"row\">Brak przychodów w rozpatrywanym okresie</div>");
+		$('#chartIncomesContainer').css('heigth', '0px');
+		return;
+	}
+	var cathegory = incomesSorted[0].cathegory;
+	let lastElement = incomesSorted.length - 1;
+	for (let element of incomesSorted) {
+		let temporary = element.cathegory;
+		if(cathegory != temporary){
+			let oneDataToChart = {
+				y: 0,
+				label: ""
+			};
+			oneDataToChart.y = sumOfCathegoryAmount;
+			oneDataToChart.label = cathegory;
+			dataPoints.push(oneDataToChart);
+			
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfIncomes += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+        let row = table.insertRow();
+        for (var key in element) {
+			if(key == "userId") continue;
+			if(key == "amount") {sumOfCathegoryAmount+= parseFloat(element.amount);};
+          let cell = row.insertCell();
+          let text = document.createTextNode(element[key]);
+          cell.appendChild(text);
+        }
+		if(element == incomesSorted[lastElement])
+		{
+			let oneDataToChart = {
+				y: 0,
+				label: ""
+			};
+			oneDataToChart.y = sumOfCathegoryAmount;
+			oneDataToChart.label = cathegory;
+			dataPoints.push(oneDataToChart);
+			
+			addSummaryRow(table, cathegory, sumOfCathegoryAmount);
+			cathegory = temporary;
+			sumOfIncomes += sumOfCathegoryAmount;
+			sumOfCathegoryAmount = 0;
+		}
+      }
+	  
+	  for(var k=0; k<dataPoints.length; k++){
+		  dataPoints[k].y = dataPoints[k].y/sumOfIncomes * 100;
+	  }
+		var chart = new CanvasJS.Chart("chartIncomesContainer", {
+			animationEnabled: true,
+			title: {
+				text: "Przychody według kategorii"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##0.00\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints
+			}]
+		});
+		chart.render();
+	    $('#chartIncomesContainer').css('height', '400px');
+		generateTableHead(table, data);			    
+    }
+function sortIncomesByCathegory(incomesSorted, incomesFromTimeSpan){
+		var cathegory="";
+		for(let i=0; i<incomesFromTimeSpan.length; i++){
+			cathegory = incomesFromTimeSpan[i].cathegory;
+			if(checkIfCathegoryIsAlreadyIncluded(cathegory,incomesSorted)) continue;
+			var temporary =[];
+			for(let k=0; k<incomesFromTimeSpan.length; k++){
+				if(cathegory==incomesFromTimeSpan[k].cathegory){
+					temporary.push(incomesFromTimeSpan[k]);
+				}
+			}
+			temporary.sort(function(a,b){
+				return new Date(b.date) - new Date(a.date);
+				});
+			Array.prototype.push.apply(incomesSorted,temporary);
+			temporary.splice(0,temporary.length);
+		}
+		return incomesSorted;
+		
+	}
+function prepareSummaryBoard() {
+	var chosenSpan = $('#dateSpan').val();
+	sumOfIncomes = 0;
+	sumOfExpences = 0;
+	$('#expenceTable').html("");
+	$('#incomeTable').html("");
+	$('#chartExpencesContainer').html("");
+	$('#chartIncomesContainer').html("");
+	$('#chartIncomesContainer').css('height', '0px');
+	$('#chartExpencesContainer').css('height', '0px');
+	$('.sumUpDiv').html("");
+	$('.sumUpDiv').css({'height': '0px'});
+	$('.summaryContainer').css({
+				'height': '600px'
+				});
+	if(chosenSpan=='nonStandardSpan'){
+		$('#nonStandardDateInput').css({
+			'display':'block',
+			'color':'white'
+		});
+		
+		$('#escapeSummary').css('margin-top', '340px');
+	}
+	else{
+		$('#nonStandardDateInput').css({
+			'display':'none'
+		});
+		
+		$('#escapeSummary').css({
+			'margin-top': '385px'
+			});
+	}
+}
+function evaluateFinanceManagement(){
+	var sumOfMoney = sumOfIncomes - sumOfExpences;
+	$('.sumUpDiv').css({'height': '30px'});
+	var sumDivContent = $('.sumUpDiv').html();
+	if(sumOfMoney >= 0){
+		sumDivContent = "Gratulacje! Świetnie sobie radzisz z zarządzaniem swoimi pieniędzmi";
+		background = 'radial-gradient(#126110 10%,#2b8c29 50%,#529e51 80%)';
+	}
+	else{
+		sumDivContent = "Niestety! Suma twoich wydatków przekroczyła sumę przychodów";
+		background = 'radial-gradient(#941e16 10%,#a8342c 50%,#bf524b 80%)';
+	}
+	$('.sumUpDiv').html(sumDivContent);
+	$('.sumUpDiv').css({'background': background});
 }

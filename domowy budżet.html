@@ -10,6 +10,7 @@
 	<meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
 	<link rel="stylesheet" type="text/css" href="style.css" ></link>
 	<link rel="stylesheet" href="css/fontello.css" type="text/css" />
+	<link rel="stylesheet" href="css2/fontello.css" type="text/css" />
 </head>
 <body>
 	<div class="content">
@@ -140,15 +141,11 @@
 				</div>
 				
 				</div>
-				<div class="row">
+				
 					<input type="button" class="expencesButton" id="addExpenceButton" value="Dodaj Wydatek">
-				</div>
-				<div class="row">
-					<input type="button" class="expencesButton" id="escape" value="Wyloguj się">
-				</div>
-				<div class="row">
-					<input type="button" class="expencesButton" id="showStorage" value="Pokaż wydatki">
-				</div>
+			
+					<input type="button" class="expencesButton" id="backFromExpencesButton" value="Powrót do menu">
+				
 			</div>
 			<div class="incomesContainer">
 				<div class="header" style="margin-top:15px;">
@@ -183,15 +180,11 @@
 						<label>Komentarz(opcjonalnie)<input type="text"  name="comment" id="commentIncome" placeholder="" class="textInput"></label>
 						
 					</div>
-					<div class="row">
+					
 						<input type="button" class="expencesButton" id="addIncomeButton" value="Dodaj Przychód">
-					</div>
-					<div class="row">
-						<input type="button" class="expencesButton" id="escapeIncomes" value="Wyloguj się">
-					</div>
-					<div class="row">
-						<input type="button" class="expencesButton" id="showIncomeStorage" value="Pokaż przychody">
-					</div>
+					
+						<input type="button" class="expencesButton" id="backFromIncomesButton" value="Powrót do menu">
+					
 					
 				</div>
 			</div>
@@ -271,7 +264,7 @@
 							</div>
 							<div id="incomeCathegoryDelete" > 
 							</div>
-							<input type="button" class="changeButton" id="deleteIncomeCathegoryButton" value="Usuń kategorię">
+							<input type="button" class="changeButton3" id="deleteIncomeCathegoryButton" value="Usuń kategorię">
 						</div>
 						<div id="lastInputsMenuSetup">
 							<h4>Usuwanie ostatnio dodanych przychodów</h4>
@@ -289,11 +282,48 @@
 						</div>
 					</div>
 			</div>
+			<div class="summaryContainer">
+				<h4>Podsumowanie wydatków oraz przychodów za podany okres</h4>
+				<div id="choosePeriodDiv">
+					<label for="dateSpan" style="color:white; margin-left:10px;">Wybierz okres do obliczeń bilansu wydatków i przychodów</label>
+					
+					<select id="dateSpan">
+					
+						<option value="lastMonth" selected >Bieżący miesiąc</option>
+						<option value="previousMonth" >Poprzedni miesiąc</option>
+						<option value="lastYear">Bieżacy rok</option>
+						<option value="nonStandardSpan">Niestandardowy</option>
+					
+					</select>
+				</div>
+				<div id="nonStandardDateInput" class="rowSummary">
+					<div style="margin-left:10px;"><label>Data początkowa<input type="date" placeholder="Podaj datę początku okresu przeliczeń" id="beginnigTimeSpan" class="textInput2"></label></div>
+					<div style="margin-left:10px;"><label>Data końcowa<input type="date" placeholder="Podaj datę końca okresu przeliczeń" id="endingTimeSpan" class="textInput2"></label></div>
+					
+				</div>
+				<input type="button" class="summaryButton" id="generateSummaryButton" value="Generuj tabele z danego okresu">
+				<table id="expenceTable" class="summaryTable">
+				</table>
+				<div id="chartExpencesContainer" class="chartContainer">
+				</div>
+				<table id="incomeTable" class="summaryTable" class="chartContainer">
+				</table>
+				<div id="chartIncomesContainer" class="chartContainer">
+				</div>
+				<div class="sumUpDiv" id="showEvaluation">
+				</div>
+				<div class="functionInterface" >
+						<input type="button" class="summaryButton" id="escapeSummary" value="Powrót do menu głównego">
+				</div>
+			</div>
 			
-			
+		</div>
+		<div id="logOutDiv">
+			Wyloguj się
 		</div>
 	</div>
 	<script src="jquery-3.4.1.min.js"></script>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	<script type="text/javascript" src="budzet.js"></script>
 </body>
 <html>

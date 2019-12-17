@@ -23,6 +23,28 @@ a:active
 {    
 	color: #fff;
 }
+#logOutDiv
+{
+	position:absolute;
+	top:15px;
+	right: 10px;
+	margin-top: 15px;
+	padding-top: 10px;
+	height: 30px;
+	width: 150px;
+	text-align:center;
+	color:white;
+	border-radius:2px;
+	background: radial-gradient(#5c6ed1 10%,#2c46d4 50%,#0a28c9 80%);
+	-webkit-box-shadow: 0px 0px 1px 2px #20206b;
+	-moz-box-shadow: 0px 0px 1px 2px #20206b;
+	box-shadow: 0px 0px 1px 1px #20206b;
+	display:none;
+}
+#logOutDiv:hover
+{
+	cursor:pointer;
+}
 .container
 {
 	width:1000px;
@@ -251,11 +273,11 @@ a:active
 }
 .expencesButton
 {
-	margin-left:15px;
-	margin-right:15px;
+	margin-left: 47.5px;
+	margin-right: 47.5px;
 	margin-top:0px;
 	height:45px;
-	width:195px;
+	width:255px;
 	background-color:blue;
 	color:white;
 	font-size:24px;
@@ -271,6 +293,7 @@ a:active
 	color:white;
 	min-width:600px;
 }
+
 .kol
 {
 	display:inline-block;
@@ -436,6 +459,10 @@ h4
 	border-radius:10px;
 	display:none;
 }
+#dateIncome
+{
+	margin-left:103px;
+}
 #lastInputsMenuSetup
 {
 	width:500px;
@@ -501,4 +528,92 @@ h4
 	-webkit-box-shadow: 2px 2px 2px 2px #20206b;
 	-moz-box-shadow: 2px 2px 2px 2px #20206b;
 	box-shadow: 2px 2px 2px 1px #20206b;
+}
+.summaryContainer
+{
+	display:none;
+	height:600px;
+	width:700px;
+	border-radius:10px;
+	margin-top:30px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#3c4091;
+	position:relative;
+	-webkit-box-shadow: 1px 1px 1px 2px #111214;
+	-moz-box-shadow: 1px 1px 1px 2px #111214;
+	box-shadow: 1px 1px 1px 1px #111214;
+}
+#endingTimeSpan
+{
+	margin-left:36px;
+}
+#generateSummaryButton
+{
+	margin-top:10px;
+	/*display:none;*/
+}
+.summaryTable
+{
+	margin-left:20px;
+	margin-right:20px;
+	margin-top:65px;
+	margin-bottom:10px;
+	border-radius:5px;
+	border: 1px solid black;
+	color:white;
+	background: radial-gradient(#5c6ed1 10%,#2c46d4 50%,#0a28c9 80%);
+	border: 1px solid black;
+	min-width: 100px;
+	text-align:center;
+}
+#incomeTable
+{
+	margin-top:10px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.summaryTable th 
+{
+	border: 1px solid black;
+	min-width: 100px;
+	text-align:center;
+	color:#d92f03;
+}
+.summaryTable td
+{
+	border: 1px solid black;
+	min-width: 100px;
+	text-align:center;
+}
+.summaryButton
+{
+	margin-left:215px;
+	margin-top:385px;
+	height:45px;
+	width:270px;
+	background-color:blue;
+	color:white;
+	font-size:18px;
+	cursor:pointer;
+	text-decoration:none;
+	display:block;
+	float:left;
+}
+#nonStandardDateInput
+{
+	display:none;
+	margin-bottom:10px;
+}
+.chartContainer
+{
+	height:0px;
+}
+.sumUpDiv
+{
+	height:0px;
+	font-size: 20px;
+	margin-top: 10px;
+	text-align: center;
+	color:white;
 }
