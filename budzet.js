@@ -968,6 +968,10 @@ function deleteCathegoryOfIncome(){
 }
 function loadIncomesFromArrayToDiv(){
 	$('#lastIncomesLoaded').html("");
+	if(incomesObj.length == 0){
+		$('#lastIncomesLoaded').html("<div class=\"row\">Brak dodanych przychodów</div>");
+		return;
+	}
 	var endOfArray = incomesObj.length-1;
 	var string = "";
 	var methodsString = "<fieldset id=\"deleteLastIncomesInLocalStorageFieldset\">";
@@ -981,6 +985,11 @@ function loadIncomesFromArrayToDiv(){
 }
 function loadExpencesFromArrayToDiv(){
 	$('#lastExpencesLoaded').html("");
+	if(expencesObj.length == 0){
+		$('#lastExpencesLoaded').html("<div class=\"row\">Brak dodanych wydatków</div>");
+		$('#lastInputsMenuSetup h4').last().css('margin-top','30px');
+		return;
+	}
 	var endOfArray = expencesObj.length-1;
 	var string = "";
 	var methodsString = "<fieldset id=\"deleteLastExpencesInLocalStorageFieldset\">";
@@ -1027,6 +1036,12 @@ function adjustButtonPositionToDeletingLastInputs(){
 	function createTableOfExpences(timeSpan){
 		$('#expenceTable').html("");
 		let table = document.getElementById("expenceTable");
+		if(expencesObj.length == 0) {
+		$('#expenceTable').html("<div class=\"row\">Brak wydatków w rozpatrywanym okresie</div>");
+		$('#expenceTable').css({'margin-left':'auto', 'margin-right': 'auto'});
+		$('#chartExpencesContainer').css('heigth', '0px');
+		return;
+	}
 		let data = Object.keys(expencesObj[0]);
 		generateExpenceTable(table, data, timeSpan);
 		
@@ -1280,6 +1295,11 @@ function adjustButtonPositionToDeletingLastInputs(){
 function createTableOfIncomes(timeSpan){
 	$('#incomeTable').html("");
 	let table = document.getElementById("incomeTable");
+	if(incomesObj.length == 0) {
+		$('#incomeTable').html("<div class=\"row\">Brak przychodów w rozpatrywanym okresie</div>");
+		$('#chartIncomesContainer').css('heigth', '0px');
+		return;
+	}
 	let data = Object.keys(incomesObj[0]);
 	generateIncomesTable(table, data, timeSpan);
 }
